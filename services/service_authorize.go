@@ -2,9 +2,9 @@ package services
 
 import (
 	"context"
+	"github.com/NeuronAccount/oauth/models"
+	"github.com/NeuronAccount/oauth/storages/oauth"
 	"github.com/NeuronFramework/rand"
-	"github.com/NeuronGroup/account-oauth/models"
-	"github.com/NeuronGroup/account-oauth/storages/oauth"
 )
 
 func (s *OauthService) Authorize(p *models.AuthorizeParams) (code *models.AuthorizationCode, err error) {

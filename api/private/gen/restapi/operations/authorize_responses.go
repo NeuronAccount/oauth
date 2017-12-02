@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/NeuronGroup/account-oauth/api/private/gen/models"
+	"github.com/NeuronAccount/oauth/api/private/gen/models"
 )
 
 // AuthorizeOKCode is the HTTP code returned for type AuthorizeOK

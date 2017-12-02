@@ -2,7 +2,7 @@ package services
 
 import (
 	"github.com/NeuronFramework/log"
-	"github.com/NeuronGroup/account-oauth/storages/oauth"
+	"github.com/NeuronAccount/oauth/storages/oauth"
 	"go.uber.org/zap"
 )
 

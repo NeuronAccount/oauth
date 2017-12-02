@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 	"github.com/NeuronFramework/errors"
-	"github.com/NeuronGroup/account-oauth/models"
+	"github.com/NeuronAccount/oauth/models"
 )
 
 func (s *OauthService) AuthorizeCodeGrant(authorizationCode string, redirectUri string, clientId string, oAuth2Client *models.OauthClient) (accessToken *models.AccessToken, err error) {

@@ -1,11 +1,11 @@
 package main
 
 import (
+	"github.com/NeuronAccount/oauth/api/oauth/gen/restapi"
+	"github.com/NeuronAccount/oauth/api/oauth/gen/restapi/operations"
+	"github.com/NeuronAccount/oauth/cmd/oauth-api/handler"
 	"github.com/NeuronFramework/log"
 	"github.com/NeuronFramework/restful"
-	"github.com/NeuronGroup/account-oauth/api/oauth/gen/restapi"
-	"github.com/NeuronGroup/account-oauth/api/oauth/gen/restapi/operations"
-	"github.com/NeuronGroup/account-oauth/cmd/oauth-api/handler"
 	"github.com/go-openapi/loads"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/rs/cors"

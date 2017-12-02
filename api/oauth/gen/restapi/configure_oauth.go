@@ -11,7 +11,7 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 	graceful "github.com/tylerb/graceful"
 
-	"github.com/NeuronGroup/account-oauth/api/oauth/gen/restapi/operations"
+	"github.com/NeuronAccount/oauth/api/oauth/gen/restapi/operations"
 )
 
 // This file is safe to edit. Once it exists it will not be overwritten

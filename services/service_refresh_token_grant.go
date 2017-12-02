@@ -2,8 +2,8 @@ package services
 
 import (
 	"context"
+	"github.com/NeuronAccount/oauth/models"
 	"github.com/NeuronFramework/errors"
-	"github.com/NeuronGroup/account-oauth/models"
 )
 
 func (s *OauthService) RefreshTokenGrant(refresh_token string, scope string, client *models.OauthClient) (accessToken *models.AccessToken, err error) {

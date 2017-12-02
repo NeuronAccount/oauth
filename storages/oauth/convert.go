@@ -1,6 +1,6 @@
 package oauth
 
-import "github.com/NeuronGroup/account-oauth/models"
+import "github.com/NeuronAccount/oauth/models"
 
 func FromOauthClient(p *OauthClient) (r *models.OauthClient) {
 	if p == nil {

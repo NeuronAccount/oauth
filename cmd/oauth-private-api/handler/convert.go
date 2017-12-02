@@ -1,7 +1,7 @@
 package handler
 
-import "github.com/NeuronGroup/account-oauth/models"
-import api "github.com/NeuronGroup/account-oauth/api/private/gen/models"
+import "github.com/NeuronAccount/oauth/models"
+import api "github.com/NeuronAccount/oauth/api/private/gen/models"
 
 func fromAuthorizationCode(p *models.AuthorizationCode) (r *api.AuthorizationCode) {
 	if p == nil {

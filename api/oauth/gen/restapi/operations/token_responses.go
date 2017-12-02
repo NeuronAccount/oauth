@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/NeuronGroup/account-oauth/api/oauth/gen/models"
+	"github.com/NeuronAccount/oauth/api/oauth/gen/models"
 )
 
 // TokenOKCode is the HTTP code returned for type TokenOK

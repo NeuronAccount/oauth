@@ -3,8 +3,8 @@ package services
 import (
 	"context"
 	"github.com/NeuronFramework/rand"
-	"github.com/NeuronGroup/account-oauth/models"
-	"github.com/NeuronGroup/account-oauth/storages/oauth"
+	"github.com/NeuronAccount/oauth/models"
+	"github.com/NeuronAccount/oauth/storages/oauth"
 )
 
 func (s *OauthService) newAccessToken(clientId string, accountId string, scope string) (accessToken *models.AccessToken, err error) {
