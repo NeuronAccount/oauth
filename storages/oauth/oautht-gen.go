@@ -361,12 +361,12 @@ func (dao *AccessTokenDao) init() (err error) {
 	return nil
 }
 func (dao *AccessTokenDao) prepareInsertStmt() (err error) {
-	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO access_token (access_token,client_id,account_id,expire_seconds,oauth_scope,create_time,update_time) VALUES (?,?,?,?,?,?,?)")
+	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO access_token (access_token,client_id,account_id,expire_seconds,oauth_scope) VALUES (?,?,?,?,?)")
 	return err
 }
 
 func (dao *AccessTokenDao) prepareUpdateStmt() (err error) {
-	dao.updateStmt, err = dao.db.Prepare(context.Background(), "UPDATE access_token SET access_token=?,client_id=?,account_id=?,expire_seconds=?,oauth_scope=?,create_time=?,update_time=? WHERE id=?")
+	dao.updateStmt, err = dao.db.Prepare(context.Background(), "UPDATE access_token SET access_token=?,client_id=?,account_id=?,expire_seconds=?,oauth_scope=? WHERE id=?")
 	return err
 }
 
@@ -381,7 +381,7 @@ func (dao *AccessTokenDao) Insert(ctx context.Context, tx *wrap.Tx, e *AccessTok
 		stmt = tx.Stmt(ctx, stmt)
 	}
 
-	result, err := stmt.Exec(ctx, e.AccessToken, e.ClientId, e.AccountId, e.ExpireSeconds, e.OauthScope, e.CreateTime, e.UpdateTime)
+	result, err := stmt.Exec(ctx, e.AccessToken, e.ClientId, e.AccountId, e.ExpireSeconds, e.OauthScope)
 	if err != nil {
 		return 0, err
 	}
@@ -400,7 +400,7 @@ func (dao *AccessTokenDao) Update(ctx context.Context, tx *wrap.Tx, e *AccessTok
 		stmt = tx.Stmt(ctx, stmt)
 	}
 
-	_, err = stmt.Exec(ctx, e.AccessToken, e.ClientId, e.AccountId, e.ExpireSeconds, e.OauthScope, e.CreateTime, e.UpdateTime, e.Id)
+	_, err = stmt.Exec(ctx, e.AccessToken, e.ClientId, e.AccountId, e.ExpireSeconds, e.OauthScope, e.Id)
 	if err != nil {
 		return err
 	}
@@ -847,12 +847,12 @@ func (dao *AuthorizationCodeDao) init() (err error) {
 	return nil
 }
 func (dao *AuthorizationCodeDao) prepareInsertStmt() (err error) {
-	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO authorization_code (authorization_code,client_id,account_id,redirect_uri,oauth_scope,expire_seconds,create_time,update_time) VALUES (?,?,?,?,?,?,?,?)")
+	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO authorization_code (authorization_code,client_id,account_id,redirect_uri,oauth_scope,expire_seconds) VALUES (?,?,?,?,?,?)")
 	return err
 }
 
 func (dao *AuthorizationCodeDao) prepareUpdateStmt() (err error) {
-	dao.updateStmt, err = dao.db.Prepare(context.Background(), "UPDATE authorization_code SET authorization_code=?,client_id=?,account_id=?,redirect_uri=?,oauth_scope=?,expire_seconds=?,create_time=?,update_time=? WHERE id=?")
+	dao.updateStmt, err = dao.db.Prepare(context.Background(), "UPDATE authorization_code SET authorization_code=?,client_id=?,account_id=?,redirect_uri=?,oauth_scope=?,expire_seconds=? WHERE id=?")
 	return err
 }
 
@@ -867,7 +867,7 @@ func (dao *AuthorizationCodeDao) Insert(ctx context.Context, tx *wrap.Tx, e *Aut
 		stmt = tx.Stmt(ctx, stmt)
 	}
 
-	result, err := stmt.Exec(ctx, e.AuthorizationCode, e.ClientId, e.AccountId, e.RedirectUri, e.OauthScope, e.ExpireSeconds, e.CreateTime, e.UpdateTime)
+	result, err := stmt.Exec(ctx, e.AuthorizationCode, e.ClientId, e.AccountId, e.RedirectUri, e.OauthScope, e.ExpireSeconds)
 	if err != nil {
 		return 0, err
 	}
@@ -886,7 +886,7 @@ func (dao *AuthorizationCodeDao) Update(ctx context.Context, tx *wrap.Tx, e *Aut
 		stmt = tx.Stmt(ctx, stmt)
 	}
 
-	_, err = stmt.Exec(ctx, e.AuthorizationCode, e.ClientId, e.AccountId, e.RedirectUri, e.OauthScope, e.ExpireSeconds, e.CreateTime, e.UpdateTime, e.Id)
+	_, err = stmt.Exec(ctx, e.AuthorizationCode, e.ClientId, e.AccountId, e.RedirectUri, e.OauthScope, e.ExpireSeconds, e.Id)
 	if err != nil {
 		return err
 	}
@@ -1287,12 +1287,12 @@ func (dao *OauthClientDao) init() (err error) {
 	return nil
 }
 func (dao *OauthClientDao) prepareInsertStmt() (err error) {
-	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO oauth_client (client_id,account_id,password_hash,redirect_uri,create_time,update_time) VALUES (?,?,?,?,?,?)")
+	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO oauth_client (client_id,account_id,password_hash,redirect_uri) VALUES (?,?,?,?)")
 	return err
 }
 
 func (dao *OauthClientDao) prepareUpdateStmt() (err error) {
-	dao.updateStmt, err = dao.db.Prepare(context.Background(), "UPDATE oauth_client SET client_id=?,account_id=?,password_hash=?,redirect_uri=?,create_time=?,update_time=? WHERE id=?")
+	dao.updateStmt, err = dao.db.Prepare(context.Background(), "UPDATE oauth_client SET client_id=?,account_id=?,password_hash=?,redirect_uri=? WHERE id=?")
 	return err
 }
 
@@ -1307,7 +1307,7 @@ func (dao *OauthClientDao) Insert(ctx context.Context, tx *wrap.Tx, e *OauthClie
 		stmt = tx.Stmt(ctx, stmt)
 	}
 
-	result, err := stmt.Exec(ctx, e.ClientId, e.AccountId, e.PasswordHash, e.RedirectUri, e.CreateTime, e.UpdateTime)
+	result, err := stmt.Exec(ctx, e.ClientId, e.AccountId, e.PasswordHash, e.RedirectUri)
 	if err != nil {
 		return 0, err
 	}
@@ -1326,7 +1326,7 @@ func (dao *OauthClientDao) Update(ctx context.Context, tx *wrap.Tx, e *OauthClie
 		stmt = tx.Stmt(ctx, stmt)
 	}
 
-	_, err = stmt.Exec(ctx, e.ClientId, e.AccountId, e.PasswordHash, e.RedirectUri, e.CreateTime, e.UpdateTime, e.Id)
+	_, err = stmt.Exec(ctx, e.ClientId, e.AccountId, e.PasswordHash, e.RedirectUri, e.Id)
 	if err != nil {
 		return err
 	}
@@ -1683,12 +1683,12 @@ func (dao *OauthScopeDao) init() (err error) {
 	return nil
 }
 func (dao *OauthScopeDao) prepareInsertStmt() (err error) {
-	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO oauth_scope (oauth_scope,scope_desc,create_time,update_time) VALUES (?,?,?,?)")
+	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO oauth_scope (oauth_scope,scope_desc) VALUES (?,?)")
 	return err
 }
 
 func (dao *OauthScopeDao) prepareUpdateStmt() (err error) {
-	dao.updateStmt, err = dao.db.Prepare(context.Background(), "UPDATE oauth_scope SET oauth_scope=?,scope_desc=?,create_time=?,update_time=? WHERE id=?")
+	dao.updateStmt, err = dao.db.Prepare(context.Background(), "UPDATE oauth_scope SET oauth_scope=?,scope_desc=? WHERE id=?")
 	return err
 }
 
@@ -1703,7 +1703,7 @@ func (dao *OauthScopeDao) Insert(ctx context.Context, tx *wrap.Tx, e *OauthScope
 		stmt = tx.Stmt(ctx, stmt)
 	}
 
-	result, err := stmt.Exec(ctx, e.OauthScope, e.ScopeDesc, e.CreateTime, e.UpdateTime)
+	result, err := stmt.Exec(ctx, e.OauthScope, e.ScopeDesc)
 	if err != nil {
 		return 0, err
 	}
@@ -1722,7 +1722,7 @@ func (dao *OauthScopeDao) Update(ctx context.Context, tx *wrap.Tx, e *OauthScope
 		stmt = tx.Stmt(ctx, stmt)
 	}
 
-	_, err = stmt.Exec(ctx, e.OauthScope, e.ScopeDesc, e.CreateTime, e.UpdateTime, e.Id)
+	_, err = stmt.Exec(ctx, e.OauthScope, e.ScopeDesc, e.Id)
 	if err != nil {
 		return err
 	}
@@ -2148,12 +2148,12 @@ func (dao *RefreshTokenDao) init() (err error) {
 	return nil
 }
 func (dao *RefreshTokenDao) prepareInsertStmt() (err error) {
-	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO refresh_token (refresh_token,client_id,account_id,expire_seconds,oauth_scope,create_time,update_time) VALUES (?,?,?,?,?,?,?)")
+	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO refresh_token (refresh_token,client_id,account_id,expire_seconds,oauth_scope) VALUES (?,?,?,?,?)")
 	return err
 }
 
 func (dao *RefreshTokenDao) prepareUpdateStmt() (err error) {
-	dao.updateStmt, err = dao.db.Prepare(context.Background(), "UPDATE refresh_token SET refresh_token=?,client_id=?,account_id=?,expire_seconds=?,oauth_scope=?,create_time=?,update_time=? WHERE id=?")
+	dao.updateStmt, err = dao.db.Prepare(context.Background(), "UPDATE refresh_token SET refresh_token=?,client_id=?,account_id=?,expire_seconds=?,oauth_scope=? WHERE id=?")
 	return err
 }
 
@@ -2168,7 +2168,7 @@ func (dao *RefreshTokenDao) Insert(ctx context.Context, tx *wrap.Tx, e *RefreshT
 		stmt = tx.Stmt(ctx, stmt)
 	}
 
-	result, err := stmt.Exec(ctx, e.RefreshToken, e.ClientId, e.AccountId, e.ExpireSeconds, e.OauthScope, e.CreateTime, e.UpdateTime)
+	result, err := stmt.Exec(ctx, e.RefreshToken, e.ClientId, e.AccountId, e.ExpireSeconds, e.OauthScope)
 	if err != nil {
 		return 0, err
 	}
@@ -2187,7 +2187,7 @@ func (dao *RefreshTokenDao) Update(ctx context.Context, tx *wrap.Tx, e *RefreshT
 		stmt = tx.Stmt(ctx, stmt)
 	}
 
-	_, err = stmt.Exec(ctx, e.RefreshToken, e.ClientId, e.AccountId, e.ExpireSeconds, e.OauthScope, e.CreateTime, e.UpdateTime, e.Id)
+	_, err = stmt.Exec(ctx, e.RefreshToken, e.ClientId, e.AccountId, e.ExpireSeconds, e.OauthScope, e.Id)
 	if err != nil {
 		return err
 	}
