@@ -5,8 +5,8 @@ import (
 	"github.com/NeuronFramework/errors"
 )
 
-func (s *OauthService) Me(accessToken string) (openId string, err error) {
-	dbAccessToken, err := s.db.AccessToken.GetQuery().AccessToken_Equal(accessToken).QueryOne(context.Background(), nil)
+func (s *OauthService) Me(ctx context.Context, accessToken string) (openId string, err error) {
+	dbAccessToken, err := s.oauthDB.AccessToken.GetQuery().AccessToken_Equal(accessToken).QueryOne(ctx, nil)
 	if err != nil {
 		return "", err
 	}

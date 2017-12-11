@@ -1,7 +1,8 @@
 package handler
 
 import (
-	"github.com/NeuronAccount/oauth/api/oauth/gen/restapi/operations"
+	"context"
+	"github.com/NeuronAccount/oauth/api/gen/restapi/operations"
 	"github.com/NeuronAccount/oauth/models"
 	"github.com/NeuronAccount/oauth/services"
 	"github.com/NeuronFramework/errors"
@@ -33,7 +34,7 @@ func NewOauthHandler(options *OauthHandlerOptions) (h *OauthHandler, err error) 
 }
 
 func (h *OauthHandler) BasicAuth(clientId string, password string) (interface{}, error) {
-	return h.service.ClientLogin(clientId, password)
+	return h.service.ClientLogin(context.Background(), clientId, password)
 }
 
 func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) middleware.Responder {
@@ -54,7 +55,8 @@ func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) 
 			return restful.Responder(errors.InvalidParam("ClientID", "不能为空"))
 		}
 
-		result, err := h.service.AuthorizeCodeGrant(*p.Code, *p.RedirectURI, *p.ClientID, oauthClient.(*models.OauthClient))
+		result, err := h.service.AuthorizeCodeGrant(p.HTTPRequest.Context(),
+			*p.Code, *p.RedirectURI, *p.ClientID, oauthClient.(*models.OauthClient))
 		if err != nil {
 			return restful.Responder(err)
 		}
@@ -69,7 +71,8 @@ func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) 
 			return restful.Responder(errors.InvalidParam("Scope", "不能为空"))
 		}
 
-		result, err := h.service.RefreshTokenGrant(*p.RefreshToken, *p.Scope, oauthClient.(*models.OauthClient))
+		result, err := h.service.RefreshTokenGrant(p.HTTPRequest.Context(),
+			*p.RefreshToken, *p.Scope, oauthClient.(*models.OauthClient))
 		if err != nil {
 			return restful.Responder(err)
 		}
@@ -81,7 +84,7 @@ func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) 
 }
 
 func (h *OauthHandler) Me(p operations.MeParams) middleware.Responder {
-	openId, err := h.service.Me(p.AccessToken)
+	openId, err := h.service.Me(p.HTTPRequest.Context(), p.AccessToken)
 	if err != nil {
 		return restful.Responder(err)
 	}

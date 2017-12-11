@@ -1,7 +1,7 @@
 package handler
 
 import (
-	api "github.com/NeuronAccount/oauth/api/oauth/gen/models"
+	api "github.com/NeuronAccount/oauth/api/gen/models"
 	"github.com/NeuronAccount/oauth/models"
 )
 

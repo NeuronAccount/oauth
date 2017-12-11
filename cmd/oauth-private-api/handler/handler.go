@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/NeuronAccount/oauth/api/private/gen/restapi/operations"
+	"github.com/NeuronAccount/oauth/api-private/gen/restapi/operations"
 	"github.com/NeuronAccount/oauth/models"
 	"github.com/NeuronAccount/oauth/services"
 	"github.com/NeuronFramework/log"
@@ -32,7 +32,7 @@ func NewOauthHandler(options *OauthHandlerOptions) (h *OauthHandler, err error) 
 }
 
 func (h *OauthHandler) Authorize(p operations.AuthorizeParams) middleware.Responder {
-	authorizationCode, err := h.service.Authorize(&models.AuthorizeParams{
+	authorizationCode, err := h.service.Authorize(p.HTTPRequest.Context(), &models.AuthorizeParams{
 		Jwt:          p.Jwt,
 		ClientID:     p.ClientID,
 		RedirectURI:  p.RedirectURI,

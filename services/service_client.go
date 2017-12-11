@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/NeuronAccount/oauth/models"
-	"github.com/NeuronAccount/oauth/storages/oauth"
+	"github.com/NeuronAccount/oauth/storages/oauth_db"
 )
 
-func (s *OauthService) ClientLogin(clientId string, password string) (c *models.OauthClient, err error) {
-	dbClient, err := s.db.OauthClient.GetQuery().ClientId_Equal(clientId).QueryOne(context.Background(), nil)
+func (s *OauthService) ClientLogin(ctx context.Context, clientId string, password string) (c *models.OauthClient, err error) {
+	dbClient, err := s.oauthDB.OauthClient.GetQuery().ClientId_Equal(clientId).QueryOne(ctx, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -21,5 +21,5 @@ func (s *OauthService) ClientLogin(clientId string, password string) (c *models.
 		return nil, fmt.Errorf("password failed")
 	}
 
-	return oauth.FromOauthClient(dbClient), nil
+	return oauth_db.FromOauthClient(dbClient), nil
 }

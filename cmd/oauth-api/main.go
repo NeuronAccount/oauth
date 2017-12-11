@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/NeuronAccount/oauth/api/oauth/gen/restapi"
-	"github.com/NeuronAccount/oauth/api/oauth/gen/restapi/operations"
+	"github.com/NeuronAccount/oauth/api/gen/restapi"
+	"github.com/NeuronAccount/oauth/api/gen/restapi/operations"
 	"github.com/NeuronAccount/oauth/cmd/oauth-api/handler"
 	"github.com/NeuronFramework/log"
 	"github.com/NeuronFramework/restful"
