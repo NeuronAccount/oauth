@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"github.com/NeuronAccount/oauth/api-private/gen/restapi/operations"
 	"github.com/NeuronAccount/oauth/models"
 	"github.com/NeuronAccount/oauth/services"
@@ -10,19 +11,14 @@ import (
 	"go.uber.org/zap"
 )
 
-type OauthHandlerOptions struct {
-}
-
 type OauthHandler struct {
 	logger  *zap.Logger
-	options *OauthHandlerOptions
 	service *services.OauthService
 }
 
-func NewOauthHandler(options *OauthHandlerOptions) (h *OauthHandler, err error) {
+func NewOauthHandler() (h *OauthHandler, err error) {
 	h = &OauthHandler{}
 	h.logger = log.TypedLogger(h)
-	h.options = options
 	h.service, err = services.NewOauthService(&services.OauthServiceOptions{})
 	if err != nil {
 		return nil, err
@@ -32,8 +28,8 @@ func NewOauthHandler(options *OauthHandlerOptions) (h *OauthHandler, err error) 
 }
 
 func (h *OauthHandler) Authorize(p operations.AuthorizeParams) middleware.Responder {
-	authorizationCode, err := h.service.Authorize(p.HTTPRequest.Context(), &models.AuthorizeParams{
-		Jwt:          p.Jwt,
+	authorizationCode, err := h.service.Authorize(context.Background(), &models.AuthorizeParams{
+		AccountJwt:   p.AccountJwt,
 		ClientID:     p.ClientID,
 		RedirectURI:  p.RedirectURI,
 		ResponseType: p.ResponseType,

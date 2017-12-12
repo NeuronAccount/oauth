@@ -12,19 +12,14 @@ import (
 	"go.uber.org/zap"
 )
 
-type OauthHandlerOptions struct {
-}
-
 type OauthHandler struct {
 	logger  *zap.Logger
-	options *OauthHandlerOptions
 	service *services.OauthService
 }
 
-func NewOauthHandler(options *OauthHandlerOptions) (h *OauthHandler, err error) {
+func NewOauthHandler() (h *OauthHandler, err error) {
 	h = &OauthHandler{}
 	h.logger = log.TypedLogger(h)
-	h.options = options
 	h.service, err = services.NewOauthService(&services.OauthServiceOptions{})
 	if err != nil {
 		return nil, err
@@ -55,7 +50,7 @@ func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) 
 			return restful.Responder(errors.InvalidParam("ClientID", "不能为空"))
 		}
 
-		result, err := h.service.AuthorizeCodeGrant(p.HTTPRequest.Context(),
+		result, err := h.service.AuthorizeCodeGrant(context.Background(),
 			*p.Code, *p.RedirectURI, *p.ClientID, oauthClient.(*models.OauthClient))
 		if err != nil {
 			return restful.Responder(err)
@@ -71,7 +66,7 @@ func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) 
 			return restful.Responder(errors.InvalidParam("Scope", "不能为空"))
 		}
 
-		result, err := h.service.RefreshTokenGrant(p.HTTPRequest.Context(),
+		result, err := h.service.RefreshTokenGrant(context.Background(),
 			*p.RefreshToken, *p.Scope, oauthClient.(*models.OauthClient))
 		if err != nil {
 			return restful.Responder(err)
@@ -84,7 +79,7 @@ func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) 
 }
 
 func (h *OauthHandler) Me(p operations.MeParams) middleware.Responder {
-	openId, err := h.service.Me(p.HTTPRequest.Context(), p.AccessToken)
+	openId, err := h.service.Me(context.Background(), p.AccessToken)
 	if err != nil {
 		return restful.Responder(err)
 	}

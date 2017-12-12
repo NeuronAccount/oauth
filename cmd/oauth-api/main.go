@@ -21,10 +21,10 @@ func main() {
 
 	logger := zap.L().Named("main")
 
-	var bind_addr string
+	var bindAddr string
 
 	cmd := cobra.Command{}
-	cmd.PersistentFlags().StringVar(&bind_addr, "bind-addr", ":8084", "api server bind addr")
+	cmd.PersistentFlags().StringVar(&bindAddr, "bind-addr", ":8084", "api server bind addr")
 	cmd.RunE = func(cmd *cobra.Command, args []string) error {
 		swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
 		if err != nil {
@@ -32,7 +32,7 @@ func main() {
 		}
 		api := operations.NewOauthAPI(swaggerSpec)
 
-		h, err := handler.NewOauthHandler(&handler.OauthHandlerOptions{})
+		h, err := handler.NewOauthHandler()
 		if err != nil {
 			return err
 		}
@@ -42,8 +42,8 @@ func main() {
 		api.TokenHandler = operations.TokenHandlerFunc(h.Token)
 		api.MeHandler = operations.MeHandlerFunc(h.Me)
 
-		logger.Info("Start server", zap.String("addr", bind_addr))
-		err = http.ListenAndServe(bind_addr,
+		logger.Info("Start server", zap.String("addr", bindAddr))
+		err = http.ListenAndServe(bindAddr,
 			restful.Recovery(cors.AllowAll().Handler(api.Serve(nil))))
 		if err != nil {
 			return err

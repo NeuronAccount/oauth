@@ -14,7 +14,6 @@ import (
 
 // AuthorizationCode authorization code
 // swagger:model AuthorizationCode
-
 type AuthorizationCode struct {
 
 	// code
@@ -23,10 +22,6 @@ type AuthorizationCode struct {
 	// expires seconds
 	ExpiresSeconds int64 `json:"expiresSeconds,omitempty"`
 }
-
-/* polymorph AuthorizationCode code false */
-
-/* polymorph AuthorizationCode expiresSeconds false */
 
 // Validate validates this authorization code
 func (m *AuthorizationCode) Validate(formats strfmt.Registry) error {

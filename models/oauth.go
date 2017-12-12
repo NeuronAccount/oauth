@@ -8,7 +8,7 @@ type OauthClient struct {
 }
 
 type AuthorizeParams struct {
-	Jwt          string
+	AccountJwt   string
 	ResponseType string
 	ClientID     string
 	Scope        string

@@ -14,7 +14,6 @@ import (
 
 // AuthorizeDefaultBody authorize default body
 // swagger:model authorizeDefaultBody
-
 type AuthorizeDefaultBody struct {
 
 	// Error code
@@ -29,14 +28,6 @@ type AuthorizeDefaultBody struct {
 	// status
 	Status *int32 `json:"status,omitempty"`
 }
-
-/* polymorph authorizeDefaultBody code false */
-
-/* polymorph authorizeDefaultBody errors false */
-
-/* polymorph authorizeDefaultBody message false */
-
-/* polymorph authorizeDefaultBody status false */
 
 // Validate validates this authorize default body
 func (m *AuthorizeDefaultBody) Validate(formats strfmt.Registry) error {

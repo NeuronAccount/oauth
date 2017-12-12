@@ -30,18 +30,18 @@ func NewAuthorizeParams() AuthorizeParams {
 type AuthorizeParams struct {
 
 	// HTTP Request Object
-	HTTPRequest *http.Request
+	HTTPRequest *http.Request `json:"-"`
 
 	/*
 	  Required: true
 	  In: query
 	*/
-	ClientID string
+	AccountJwt string
 	/*
 	  Required: true
 	  In: query
 	*/
-	Jwt string
+	ClientID string
 	/*
 	  Required: true
 	  In: query
@@ -72,13 +72,13 @@ func (o *AuthorizeParams) BindRequest(r *http.Request, route *middleware.Matched
 
 	qs := runtime.Values(r.URL.Query())
 
-	qClientID, qhkClientID, _ := qs.GetOK("client_id")
-	if err := o.bindClientID(qClientID, qhkClientID, route.Formats); err != nil {
+	qAccountJwt, qhkAccountJwt, _ := qs.GetOK("accountJwt")
+	if err := o.bindAccountJwt(qAccountJwt, qhkAccountJwt, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
-	qJwt, qhkJwt, _ := qs.GetOK("jwt")
-	if err := o.bindJwt(qJwt, qhkJwt, route.Formats); err != nil {
+	qClientID, qhkClientID, _ := qs.GetOK("client_id")
+	if err := o.bindClientID(qClientID, qhkClientID, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -108,6 +108,23 @@ func (o *AuthorizeParams) BindRequest(r *http.Request, route *middleware.Matched
 	return nil
 }
 
+func (o *AuthorizeParams) bindAccountJwt(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	if !hasKey {
+		return errors.Required("accountJwt", "query")
+	}
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+	if err := validate.RequiredString("accountJwt", "query", raw); err != nil {
+		return err
+	}
+
+	o.AccountJwt = raw
+
+	return nil
+}
+
 func (o *AuthorizeParams) bindClientID(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	if !hasKey {
 		return errors.Required("client_id", "query")
@@ -121,23 +138,6 @@ func (o *AuthorizeParams) bindClientID(rawData []string, hasKey bool, formats st
 	}
 
 	o.ClientID = raw
-
-	return nil
-}
-
-func (o *AuthorizeParams) bindJwt(rawData []string, hasKey bool, formats strfmt.Registry) error {
-	if !hasKey {
-		return errors.Required("jwt", "query")
-	}
-	var raw string
-	if len(rawData) > 0 {
-		raw = rawData[len(rawData)-1]
-	}
-	if err := validate.RequiredString("jwt", "query", raw); err != nil {
-		return err
-	}
-
-	o.Jwt = raw
 
 	return nil
 }

@@ -13,8 +13,8 @@ import (
 
 // AuthorizeURL generates an URL for the authorize operation
 type AuthorizeURL struct {
+	AccountJwt   string
 	ClientID     string
-	Jwt          string
 	RedirectURI  string
 	ResponseType string
 	Scope        string
@@ -54,14 +54,14 @@ func (o *AuthorizeURL) Build() (*url.URL, error) {
 
 	qs := make(url.Values)
 
+	accountJwt := o.AccountJwt
+	if accountJwt != "" {
+		qs.Set("accountJwt", accountJwt)
+	}
+
 	clientID := o.ClientID
 	if clientID != "" {
 		qs.Set("client_id", clientID)
-	}
-
-	jwt := o.Jwt
-	if jwt != "" {
-		qs.Set("jwt", jwt)
 	}
 
 	redirectURI := o.RedirectURI

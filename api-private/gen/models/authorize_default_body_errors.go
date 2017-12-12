@@ -16,7 +16,6 @@ import (
 
 // AuthorizeDefaultBodyErrors Errors
 // swagger:model authorizeDefaultBodyErrors
-
 type AuthorizeDefaultBodyErrors []*AuthorizeDefaultBodyErrorsItems
 
 // Validate validates this authorize default body errors

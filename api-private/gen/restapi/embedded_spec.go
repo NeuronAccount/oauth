@@ -10,7 +10,7 @@ import (
 )
 
 // SwaggerJSON embedded version of the swagger document used at generation time
-var SwaggerJSON json.RawMessage
+var SwaggerJSON, FlatSwaggerJSON json.RawMessage
 
 func init() {
 	SwaggerJSON = json.RawMessage([]byte(`{
@@ -40,7 +40,149 @@ func init() {
         "parameters": [
           {
             "type": "string",
-            "name": "jwt",
+            "name": "accountJwt",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "response_type",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "client_id",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "redirect_uri",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "scope",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "state",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "$ref": "#/definitions/AuthorizationCode"
+            }
+          },
+          "default": {
+            "$ref": "#/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/clients": {},
+    "/scopes": {}
+  },
+  "definitions": {
+    "AuthorizationCode": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "expiresSeconds": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    }
+  },
+  "responses": {
+    "ErrorResponse": {
+      "description": "Error response",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "description": "Error code",
+            "type": "string"
+          },
+          "errors": {
+            "description": "Errors",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "description": "error code",
+                  "type": "string"
+                },
+                "field": {
+                  "description": "field name",
+                  "type": "string"
+                },
+                "message": {
+                  "description": "error message",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "message": {
+            "description": "Error message",
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "format": "int32",
+            "default": "Http status"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Basic": {
+      "type": "basic"
+    }
+  }
+}`))
+	FlatSwaggerJSON = json.RawMessage([]byte(`{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "title": "Oauth Private API",
+    "contact": {
+      "name": "mars"
+    },
+    "version": "v1"
+  },
+  "basePath": "/api-private/v1/oauth",
+  "paths": {
+    "/authorize": {
+      "post": {
+        "operationId": "Authorize",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "accountJwt",
             "in": "query",
             "required": true
           },
@@ -167,7 +309,25 @@ func init() {
             "type": "string"
           },
           "errors": {
-            "$ref": "#/definitions/authorizeDefaultBodyErrors"
+            "description": "Errors",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "description": "error code",
+                  "type": "string"
+                },
+                "field": {
+                  "description": "field name",
+                  "type": "string"
+                },
+                "message": {
+                  "description": "error message",
+                  "type": "string"
+                }
+              }
+            }
           },
           "message": {
             "description": "Error message",

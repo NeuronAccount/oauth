@@ -14,7 +14,6 @@ import (
 
 // AuthorizeDefaultBodyErrorsItems authorize default body errors items
 // swagger:model authorizeDefaultBodyErrorsItems
-
 type AuthorizeDefaultBodyErrorsItems struct {
 
 	// error code
@@ -26,12 +25,6 @@ type AuthorizeDefaultBodyErrorsItems struct {
 	// error message
 	Message string `json:"message,omitempty"`
 }
-
-/* polymorph authorizeDefaultBodyErrorsItems code false */
-
-/* polymorph authorizeDefaultBodyErrorsItems field false */
-
-/* polymorph authorizeDefaultBodyErrorsItems message false */
 
 // Validate validates this authorize default body errors items
 func (m *AuthorizeDefaultBodyErrorsItems) Validate(formats strfmt.Registry) error {

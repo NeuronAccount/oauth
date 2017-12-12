@@ -32,7 +32,7 @@ func main() {
 		}
 		api := operations.NewOauthPrivateAPI(swaggerSpec)
 
-		h, err := handler.NewOauthHandler(&handler.OauthHandlerOptions{})
+		h, err := handler.NewOauthHandler()
 		if err != nil {
 			return err
 		}

@@ -5,13 +5,20 @@ import (
 	"github.com/NeuronAccount/oauth/models"
 	"github.com/NeuronAccount/oauth/storages/oauth_db"
 	"github.com/NeuronFramework/rand"
+	"github.com/dgrijalva/jwt-go"
 )
 
 func (s *OauthService) Authorize(ctx context.Context, p *models.AuthorizeParams) (code *models.AuthorizationCode, err error) {
+	claims := jwt.StandardClaims{}
+	_, err = jwt.ParseWithClaims(p.AccountJwt, &claims, func(t *jwt.Token) (interface{}, error) { return []byte("0123456789"), nil })
+	if err != nil {
+		return nil, err
+	}
+
 	dbAuthorizationCode := &oauth_db.AuthorizationCode{}
 	dbAuthorizationCode.AuthorizationCode = rand.NextBase64(16)
 	dbAuthorizationCode.ClientId = p.ClientID
-	dbAuthorizationCode.AccountId = p.Jwt
+	dbAuthorizationCode.AccountId = claims.Subject
 	dbAuthorizationCode.RedirectUri = p.RedirectURI
 	dbAuthorizationCode.OauthScope = p.Scope
 	dbAuthorizationCode.ExpireSeconds = 300
