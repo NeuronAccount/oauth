@@ -9,8 +9,6 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
-
-	"github.com/NeuronAccount/oauth/api/gen/models"
 )
 
 // MeOKCode is the HTTP code returned for type MeOK
@@ -53,62 +51,4 @@ func (o *MeOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) 
 		panic(err) // let the recovery middleware deal with this
 	}
 
-}
-
-/*MeDefault Error response
-
-swagger:response meDefault
-*/
-type MeDefault struct {
-	_statusCode int
-
-	/*
-	  In: Body
-	*/
-	Payload *models.MeDefaultBody `json:"body,omitempty"`
-}
-
-// NewMeDefault creates MeDefault with default headers values
-func NewMeDefault(code int) *MeDefault {
-	if code <= 0 {
-		code = 500
-	}
-
-	return &MeDefault{
-		_statusCode: code,
-	}
-}
-
-// WithStatusCode adds the status to the me default response
-func (o *MeDefault) WithStatusCode(code int) *MeDefault {
-	o._statusCode = code
-	return o
-}
-
-// SetStatusCode sets the status to the me default response
-func (o *MeDefault) SetStatusCode(code int) {
-	o._statusCode = code
-}
-
-// WithPayload adds the payload to the me default response
-func (o *MeDefault) WithPayload(payload *models.MeDefaultBody) *MeDefault {
-	o.Payload = payload
-	return o
-}
-
-// SetPayload sets the payload to the me default response
-func (o *MeDefault) SetPayload(payload *models.MeDefaultBody) {
-	o.Payload = payload
-}
-
-// WriteResponse to the client
-func (o *MeDefault) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
-
-	rw.WriteHeader(o._statusCode)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
-	}
 }

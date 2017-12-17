@@ -5,7 +5,6 @@ Package restapi Oauth API
 
     Schemes:
       http
-      https
     Host: localhost
     BasePath: /api/v1/oauth
     Version: v1

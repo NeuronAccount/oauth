@@ -81,9 +81,6 @@ func init() {
             "schema": {
               "$ref": "#/definitions/AuthorizationCode"
             }
-          },
-          "default": {
-            "$ref": "#/responses/ErrorResponse"
           }
         }
       }
@@ -101,50 +98,6 @@ func init() {
         "expiresSeconds": {
           "type": "integer",
           "format": "int64"
-        }
-      }
-    }
-  },
-  "responses": {
-    "ErrorResponse": {
-      "description": "Error response",
-      "schema": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "description": "Error code",
-            "type": "string"
-          },
-          "errors": {
-            "description": "Errors",
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "code": {
-                  "description": "error code",
-                  "type": "string"
-                },
-                "field": {
-                  "description": "field name",
-                  "type": "string"
-                },
-                "message": {
-                  "description": "error message",
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "message": {
-            "description": "Error message",
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "format": "int32",
-            "default": "Http status"
-          }
         }
       }
     }
@@ -223,12 +176,6 @@ func init() {
             "schema": {
               "$ref": "#/definitions/AuthorizationCode"
             }
-          },
-          "default": {
-            "description": "Error response",
-            "schema": {
-              "$ref": "#/definitions/authorizeDefaultBody"
-            }
           }
         }
       }
@@ -246,98 +193,6 @@ func init() {
         "expiresSeconds": {
           "type": "integer",
           "format": "int64"
-        }
-      }
-    },
-    "authorizeDefaultBody": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "description": "Error code",
-          "type": "string"
-        },
-        "errors": {
-          "$ref": "#/definitions/authorizeDefaultBodyErrors"
-        },
-        "message": {
-          "description": "Error message",
-          "type": "string"
-        },
-        "status": {
-          "type": "string",
-          "format": "int32",
-          "default": "Http status"
-        }
-      },
-      "x-go-gen-location": "operations"
-    },
-    "authorizeDefaultBodyErrors": {
-      "description": "Errors",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/authorizeDefaultBodyErrorsItems"
-      },
-      "x-go-gen-location": "operations"
-    },
-    "authorizeDefaultBodyErrorsItems": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "description": "error code",
-          "type": "string"
-        },
-        "field": {
-          "description": "field name",
-          "type": "string"
-        },
-        "message": {
-          "description": "error message",
-          "type": "string"
-        }
-      },
-      "x-go-gen-location": "operations"
-    }
-  },
-  "responses": {
-    "ErrorResponse": {
-      "description": "Error response",
-      "schema": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "description": "Error code",
-            "type": "string"
-          },
-          "errors": {
-            "description": "Errors",
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "code": {
-                  "description": "error code",
-                  "type": "string"
-                },
-                "field": {
-                  "description": "field name",
-                  "type": "string"
-                },
-                "message": {
-                  "description": "error message",
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "message": {
-            "description": "Error message",
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "format": "int32",
-            "default": "Http status"
-          }
         }
       }
     }

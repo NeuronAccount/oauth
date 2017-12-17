@@ -3,8 +3,8 @@ package services
 import (
 	"context"
 	"fmt"
-	"github.com/NeuronAccount/oauth/models"
-	"github.com/NeuronAccount/oauth/storages/oauth_db"
+	"github.com/NeuronOauth/oauth/models"
+	"github.com/NeuronOauth/oauth/storages/oauth_db"
 )
 
 func (s *OauthService) ClientLogin(ctx context.Context, clientId string, password string) (c *models.OauthClient, err error) {

@@ -14,7 +14,6 @@ import (
 
 // AccessToken access token
 // swagger:model AccessToken
-
 type AccessToken struct {
 
 	// access token
@@ -32,16 +31,6 @@ type AccessToken struct {
 	// token type
 	TokenType string `json:"token_type,omitempty"`
 }
-
-/* polymorph AccessToken access_token false */
-
-/* polymorph AccessToken expires_in false */
-
-/* polymorph AccessToken refresh_token false */
-
-/* polymorph AccessToken scope false */
-
-/* polymorph AccessToken token_type false */
 
 // Validate validates this access token
 func (m *AccessToken) Validate(formats strfmt.Registry) error {

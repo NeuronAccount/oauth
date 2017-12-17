@@ -2,9 +2,9 @@ package services
 
 import (
 	"context"
-	"github.com/NeuronAccount/oauth/models"
-	"github.com/NeuronAccount/oauth/storages/oauth_db"
 	"github.com/NeuronFramework/rand"
+	"github.com/NeuronOauth/oauth/models"
+	"github.com/NeuronOauth/oauth/storages/oauth_db"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -16,7 +16,7 @@ func (s *OauthService) Authorize(ctx context.Context, p *models.AuthorizeParams)
 	}
 
 	dbAuthorizationCode := &oauth_db.AuthorizationCode{}
-	dbAuthorizationCode.AuthorizationCode = rand.NextBase64(16)
+	dbAuthorizationCode.AuthorizationCode = rand.NextHex(16)
 	dbAuthorizationCode.ClientId = p.ClientID
 	dbAuthorizationCode.AccountId = claims.Subject
 	dbAuthorizationCode.RedirectUri = p.RedirectURI

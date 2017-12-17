@@ -2,11 +2,11 @@ package handler
 
 import (
 	"context"
-	"github.com/NeuronAccount/oauth/api-private/gen/restapi/operations"
-	"github.com/NeuronAccount/oauth/models"
-	"github.com/NeuronAccount/oauth/services"
+	"github.com/NeuronFramework/errors"
 	"github.com/NeuronFramework/log"
-	"github.com/NeuronFramework/restful"
+	"github.com/NeuronOauth/oauth/api-private/gen/restapi/operations"
+	"github.com/NeuronOauth/oauth/models"
+	"github.com/NeuronOauth/oauth/services"
 	"github.com/go-openapi/runtime/middleware"
 	"go.uber.org/zap"
 )
@@ -38,7 +38,7 @@ func (h *OauthHandler) Authorize(p operations.AuthorizeParams) middleware.Respon
 	})
 
 	if err != nil {
-		return restful.Responder(err)
+		return errors.Wrap(err)
 	}
 
 	return operations.NewAuthorizeOK().WithPayload(fromAuthorizationCode(authorizationCode))

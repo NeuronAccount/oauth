@@ -1,52 +1,33 @@
 package main
 
 import (
-	"github.com/NeuronAccount/oauth/api-private/gen/restapi"
-	"github.com/NeuronAccount/oauth/api-private/gen/restapi/operations"
-	"github.com/NeuronAccount/oauth/cmd/oauth-private-api/handler"
-	"github.com/NeuronFramework/log"
 	"github.com/NeuronFramework/restful"
+	"github.com/NeuronOauth/oauth/api-private/gen/restapi"
+	"github.com/NeuronOauth/oauth/api-private/gen/restapi/operations"
+	"github.com/NeuronOauth/oauth/cmd/oauth-private-api/handler"
 	"github.com/go-openapi/loads"
-	"github.com/go-openapi/runtime/middleware"
-	"github.com/rs/cors"
-	"github.com/spf13/cobra"
-	"go.uber.org/zap"
 	"net/http"
+	"os"
 )
 
 func main() {
-	log.Init(true)
+	os.Setenv("DEBUG", "true")
+	os.Setenv("PORT", "8085")
 
-	middleware.Debug = false
-
-	logger := zap.L().Named("main")
-
-	var bindAddr string
-
-	cmd := cobra.Command{}
-	cmd.PersistentFlags().StringVar(&bindAddr, "bind-addr", ":8085", "api server bind addr")
-	cmd.RunE = func(cmd *cobra.Command, args []string) error {
-		swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
-		if err != nil {
-			return err
-		}
-		api := operations.NewOauthPrivateAPI(swaggerSpec)
-
+	restful.Run(func() (http.Handler, error) {
 		h, err := handler.NewOauthHandler()
 		if err != nil {
-			return err
+			return nil, err
 		}
 
+		swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
+		if err != nil {
+			return nil, err
+		}
+
+		api := operations.NewOauthPrivateAPI(swaggerSpec)
 		api.AuthorizeHandler = operations.AuthorizeHandlerFunc(h.Authorize)
 
-		logger.Info("Start server", zap.String("addr", bindAddr))
-		err = http.ListenAndServe(bindAddr,
-			restful.Recovery(cors.AllowAll().Handler(api.Serve(nil))))
-		if err != nil {
-			return err
-		}
-
-		return nil
-	}
-	cmd.Execute()
+		return api.Serve(nil), nil
+	})
 }

@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+	"go.uber.org/zap"
 )
 
 // TokenHandlerFunc turns a function with the right signature into a token handler
@@ -64,7 +65,11 @@ func (o *Token) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	zap.L().Named("api").Info("Token", zap.Any("request", &Params))
+
 	res := o.Handler.Handle(Params, principal) // actually handle the request
+
+	zap.L().Named("api").Info("Token", zap.Any("response", res))
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

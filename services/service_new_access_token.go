@@ -2,14 +2,14 @@ package services
 
 import (
 	"context"
-	"github.com/NeuronAccount/oauth/models"
-	"github.com/NeuronAccount/oauth/storages/oauth_db"
 	"github.com/NeuronFramework/rand"
+	"github.com/NeuronOauth/oauth/models"
+	"github.com/NeuronOauth/oauth/storages/oauth_db"
 )
 
 func (s *OauthService) newAccessToken(ctx context.Context, clientId string, accountId string, scope string) (accessToken *models.AccessToken, err error) {
 	dbAccessToken := &oauth_db.AccessToken{}
-	dbAccessToken.AccessToken = rand.NextBase64(16)
+	dbAccessToken.AccessToken = rand.NextHex(16)
 	dbAccessToken.ClientId = clientId
 	dbAccessToken.AccountId = accountId
 	dbAccessToken.OauthScope = scope
@@ -20,7 +20,7 @@ func (s *OauthService) newAccessToken(ctx context.Context, clientId string, acco
 	}
 
 	dbRefreshToken := &oauth_db.RefreshToken{}
-	dbRefreshToken.RefreshToken = rand.NextBase64(16)
+	dbRefreshToken.RefreshToken = rand.NextHex(16)
 	dbRefreshToken.ClientId = clientId
 	dbRefreshToken.AccountId = accountId
 	dbRefreshToken.OauthScope = scope

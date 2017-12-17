@@ -20,7 +20,7 @@ import (
 	flags "github.com/jessevdk/go-flags"
 	graceful "github.com/tylerb/graceful"
 
-	"github.com/NeuronAccount/oauth/api/gen/restapi/operations"
+	"github.com/NeuronOauth/oauth/api/gen/restapi/operations"
 )
 
 const (
@@ -34,7 +34,6 @@ var defaultSchemes []string
 func init() {
 	defaultSchemes = []string{
 		schemeHTTP,
-		schemeHTTPS,
 	}
 }
 

@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/NeuronFramework/restful"
 	errors "github.com/go-openapi/errors"
 	loads "github.com/go-openapi/loads"
 	runtime "github.com/go-openapi/runtime"
@@ -29,7 +30,7 @@ func NewOauthAPI(spec *loads.Document) *OauthAPI {
 		defaultProduces:     "application/json",
 		ServerShutdown:      func() {},
 		spec:                spec,
-		ServeError:          errors.ServeError,
+		ServeError:          restful.ServeError,
 		BasicAuthenticator:  security.BasicAuth,
 		APIKeyAuthenticator: security.APIKeyAuth,
 		BearerAuthenticator: security.BearerAuth,
@@ -287,7 +288,7 @@ func (o *OauthAPI) Serve(builder middleware.Builder) http.Handler {
 	return o.context.APIHandler(builder)
 }
 
-// Init allows you to just initialize the handler cache, you can then recompose the middelware as you see fit
+// Init allows you to just initialize the handler cache, you can then recompose the middleware as you see fit
 func (o *OauthAPI) Init() {
 	if len(o.handlers) == 0 {
 		o.initHandlerCache()

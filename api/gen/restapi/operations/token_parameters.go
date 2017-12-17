@@ -30,7 +30,7 @@ func NewTokenParams() TokenParams {
 type TokenParams struct {
 
 	// HTTP Request Object
-	HTTPRequest *http.Request
+	HTTPRequest *http.Request `json:"-"`
 
 	/*
 	  In: query

@@ -11,12 +11,12 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 	graceful "github.com/tylerb/graceful"
 
-	"github.com/NeuronAccount/oauth/api/gen/restapi/operations"
+	"github.com/NeuronOauth/oauth/api/gen/restapi/operations"
 )
 
 // This file is safe to edit. Once it exists it will not be overwritten
 
-//go:generate swagger generate server --target ../gen --name  --spec ../swagger.json
+//go:generate swagger generate server --target ../gen --name  --spec ../swagger.json --template-dir /Users/god/work/neuron/src/github.com/NeuronFramework/restful/go_template/
 
 func configureFlags(api *operations.OauthAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }

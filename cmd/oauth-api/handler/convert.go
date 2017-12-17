@@ -1,8 +1,8 @@
 package handler
 
 import (
-	api "github.com/NeuronAccount/oauth/api/gen/models"
-	"github.com/NeuronAccount/oauth/models"
+	api "github.com/NeuronOauth/oauth/api/gen/models"
+	"github.com/NeuronOauth/oauth/models"
 )
 
 func fromTokenResponse(p *models.AccessToken) (r *api.AccessToken) {

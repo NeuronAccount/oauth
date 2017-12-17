@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"strings"
 
-	errors "github.com/go-openapi/errors"
+	"github.com/NeuronFramework/restful"
 	loads "github.com/go-openapi/loads"
 	runtime "github.com/go-openapi/runtime"
 	middleware "github.com/go-openapi/runtime/middleware"
@@ -29,7 +29,7 @@ func NewOauthPrivateAPI(spec *loads.Document) *OauthPrivateAPI {
 		defaultProduces:     "application/json",
 		ServerShutdown:      func() {},
 		spec:                spec,
-		ServeError:          errors.ServeError,
+		ServeError:          restful.ServeError,
 		BasicAuthenticator:  security.BasicAuth,
 		APIKeyAuthenticator: security.APIKeyAuth,
 		BearerAuthenticator: security.BearerAuth,

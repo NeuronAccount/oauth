@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/NeuronAccount/oauth/api/gen/models"
+	"github.com/NeuronOauth/oauth/api/gen/models"
 )
 
 // TokenOKCode is the HTTP code returned for type TokenOK
@@ -48,64 +48,6 @@ func (o *TokenOK) SetPayload(payload *models.AccessToken) {
 func (o *TokenOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
-	}
-}
-
-/*TokenDefault Error response
-
-swagger:response tokenDefault
-*/
-type TokenDefault struct {
-	_statusCode int
-
-	/*
-	  In: Body
-	*/
-	Payload *models.TokenDefaultBody `json:"body,omitempty"`
-}
-
-// NewTokenDefault creates TokenDefault with default headers values
-func NewTokenDefault(code int) *TokenDefault {
-	if code <= 0 {
-		code = 500
-	}
-
-	return &TokenDefault{
-		_statusCode: code,
-	}
-}
-
-// WithStatusCode adds the status to the token default response
-func (o *TokenDefault) WithStatusCode(code int) *TokenDefault {
-	o._statusCode = code
-	return o
-}
-
-// SetStatusCode sets the status to the token default response
-func (o *TokenDefault) SetStatusCode(code int) {
-	o._statusCode = code
-}
-
-// WithPayload adds the payload to the token default response
-func (o *TokenDefault) WithPayload(payload *models.TokenDefaultBody) *TokenDefault {
-	o.Payload = payload
-	return o
-}
-
-// SetPayload sets the payload to the token default response
-func (o *TokenDefault) SetPayload(payload *models.TokenDefaultBody) {
-	o.Payload = payload
-}
-
-// WriteResponse to the client
-func (o *TokenDefault) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
-
-	rw.WriteHeader(o._statusCode)
 	if o.Payload != nil {
 		payload := o.Payload
 		if err := producer.Produce(rw, payload); err != nil {

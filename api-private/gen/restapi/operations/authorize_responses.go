@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/NeuronAccount/oauth/api-private/gen/models"
+	"github.com/NeuronOauth/oauth/api-private/gen/models"
 )
 
 // AuthorizeOKCode is the HTTP code returned for type AuthorizeOK
@@ -48,64 +48,6 @@ func (o *AuthorizeOK) SetPayload(payload *models.AuthorizationCode) {
 func (o *AuthorizeOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
-	}
-}
-
-/*AuthorizeDefault Error response
-
-swagger:response authorizeDefault
-*/
-type AuthorizeDefault struct {
-	_statusCode int
-
-	/*
-	  In: Body
-	*/
-	Payload *models.AuthorizeDefaultBody `json:"body,omitempty"`
-}
-
-// NewAuthorizeDefault creates AuthorizeDefault with default headers values
-func NewAuthorizeDefault(code int) *AuthorizeDefault {
-	if code <= 0 {
-		code = 500
-	}
-
-	return &AuthorizeDefault{
-		_statusCode: code,
-	}
-}
-
-// WithStatusCode adds the status to the authorize default response
-func (o *AuthorizeDefault) WithStatusCode(code int) *AuthorizeDefault {
-	o._statusCode = code
-	return o
-}
-
-// SetStatusCode sets the status to the authorize default response
-func (o *AuthorizeDefault) SetStatusCode(code int) {
-	o._statusCode = code
-}
-
-// WithPayload adds the payload to the authorize default response
-func (o *AuthorizeDefault) WithPayload(payload *models.AuthorizeDefaultBody) *AuthorizeDefault {
-	o.Payload = payload
-	return o
-}
-
-// SetPayload sets the payload to the authorize default response
-func (o *AuthorizeDefault) SetPayload(payload *models.AuthorizeDefaultBody) {
-	o.Payload = payload
-}
-
-// WriteResponse to the client
-func (o *AuthorizeDefault) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
-
-	rw.WriteHeader(o._statusCode)
 	if o.Payload != nil {
 		payload := o.Payload
 		if err := producer.Produce(rw, payload); err != nil {
