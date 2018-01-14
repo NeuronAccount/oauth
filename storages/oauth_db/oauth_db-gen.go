@@ -3,14 +3,18 @@ package oauth_db
 import (
 	"bytes"
 	"context"
+	"database/sql"
 	"fmt"
 	"github.com/NeuronFramework/log"
 	"github.com/NeuronFramework/sql/wrap"
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 	"strings"
 	"time"
 )
+
+var _ = sql.ErrNoRows
+var _ = mysql.ErrOldProtocol
 
 type BaseQuery struct {
 	forUpdate     bool
@@ -81,7 +85,7 @@ var ACCESS_TOKEN_ALL_FIELDS = []string{
 }
 
 type AccessToken struct {
-	Id            int64  //size=20
+	Id            uint64 //size=20
 	AccessToken   string //size=1024
 	ClientId      string //size=128
 	AccountId     string //size=128
@@ -181,18 +185,20 @@ func (q *AccessTokenQuery) And() *AccessTokenQuery   { return q.w(" AND ") }
 func (q *AccessTokenQuery) Or() *AccessTokenQuery    { return q.w(" OR ") }
 func (q *AccessTokenQuery) Not() *AccessTokenQuery   { return q.w(" NOT ") }
 
-func (q *AccessTokenQuery) Id_Equal(v int64) *AccessTokenQuery { return q.w("id='" + fmt.Sprint(v) + "'") }
-func (q *AccessTokenQuery) Id_NotEqual(v int64) *AccessTokenQuery {
+func (q *AccessTokenQuery) Id_Equal(v uint64) *AccessTokenQuery {
+	return q.w("id='" + fmt.Sprint(v) + "'")
+}
+func (q *AccessTokenQuery) Id_NotEqual(v uint64) *AccessTokenQuery {
 	return q.w("id<>'" + fmt.Sprint(v) + "'")
 }
-func (q *AccessTokenQuery) Id_Less(v int64) *AccessTokenQuery { return q.w("id<'" + fmt.Sprint(v) + "'") }
-func (q *AccessTokenQuery) Id_LessEqual(v int64) *AccessTokenQuery {
+func (q *AccessTokenQuery) Id_Less(v uint64) *AccessTokenQuery { return q.w("id<'" + fmt.Sprint(v) + "'") }
+func (q *AccessTokenQuery) Id_LessEqual(v uint64) *AccessTokenQuery {
 	return q.w("id<='" + fmt.Sprint(v) + "'")
 }
-func (q *AccessTokenQuery) Id_Greater(v int64) *AccessTokenQuery {
+func (q *AccessTokenQuery) Id_Greater(v uint64) *AccessTokenQuery {
 	return q.w("id>'" + fmt.Sprint(v) + "'")
 }
-func (q *AccessTokenQuery) Id_GreaterEqual(v int64) *AccessTokenQuery {
+func (q *AccessTokenQuery) Id_GreaterEqual(v uint64) *AccessTokenQuery {
 	return q.w("id>='" + fmt.Sprint(v) + "'")
 }
 func (q *AccessTokenQuery) AccessToken_Equal(v string) *AccessTokenQuery {
@@ -408,7 +414,7 @@ func (dao *AccessTokenDao) Update(ctx context.Context, tx *wrap.Tx, e *AccessTok
 	return nil
 }
 
-func (dao *AccessTokenDao) Delete(ctx context.Context, tx *wrap.Tx, id int64) (err error) {
+func (dao *AccessTokenDao) Delete(ctx context.Context, tx *wrap.Tx, id uint64) (err error) {
 	stmt := dao.deleteStmt
 	if tx != nil {
 		stmt = tx.Stmt(ctx, stmt)
@@ -544,7 +550,7 @@ var AUTHORIZATION_CODE_ALL_FIELDS = []string{
 }
 
 type AuthorizationCode struct {
-	Id                int64  //size=20
+	Id                uint64 //size=20
 	AuthorizationCode string //size=128
 	ClientId          string //size=128
 	AccountId         string //size=128
@@ -645,22 +651,22 @@ func (q *AuthorizationCodeQuery) And() *AuthorizationCodeQuery   { return q.w(" 
 func (q *AuthorizationCodeQuery) Or() *AuthorizationCodeQuery    { return q.w(" OR ") }
 func (q *AuthorizationCodeQuery) Not() *AuthorizationCodeQuery   { return q.w(" NOT ") }
 
-func (q *AuthorizationCodeQuery) Id_Equal(v int64) *AuthorizationCodeQuery {
+func (q *AuthorizationCodeQuery) Id_Equal(v uint64) *AuthorizationCodeQuery {
 	return q.w("id='" + fmt.Sprint(v) + "'")
 }
-func (q *AuthorizationCodeQuery) Id_NotEqual(v int64) *AuthorizationCodeQuery {
+func (q *AuthorizationCodeQuery) Id_NotEqual(v uint64) *AuthorizationCodeQuery {
 	return q.w("id<>'" + fmt.Sprint(v) + "'")
 }
-func (q *AuthorizationCodeQuery) Id_Less(v int64) *AuthorizationCodeQuery {
+func (q *AuthorizationCodeQuery) Id_Less(v uint64) *AuthorizationCodeQuery {
 	return q.w("id<'" + fmt.Sprint(v) + "'")
 }
-func (q *AuthorizationCodeQuery) Id_LessEqual(v int64) *AuthorizationCodeQuery {
+func (q *AuthorizationCodeQuery) Id_LessEqual(v uint64) *AuthorizationCodeQuery {
 	return q.w("id<='" + fmt.Sprint(v) + "'")
 }
-func (q *AuthorizationCodeQuery) Id_Greater(v int64) *AuthorizationCodeQuery {
+func (q *AuthorizationCodeQuery) Id_Greater(v uint64) *AuthorizationCodeQuery {
 	return q.w("id>'" + fmt.Sprint(v) + "'")
 }
-func (q *AuthorizationCodeQuery) Id_GreaterEqual(v int64) *AuthorizationCodeQuery {
+func (q *AuthorizationCodeQuery) Id_GreaterEqual(v uint64) *AuthorizationCodeQuery {
 	return q.w("id>='" + fmt.Sprint(v) + "'")
 }
 func (q *AuthorizationCodeQuery) AuthorizationCode_Equal(v string) *AuthorizationCodeQuery {
@@ -894,7 +900,7 @@ func (dao *AuthorizationCodeDao) Update(ctx context.Context, tx *wrap.Tx, e *Aut
 	return nil
 }
 
-func (dao *AuthorizationCodeDao) Delete(ctx context.Context, tx *wrap.Tx, id int64) (err error) {
+func (dao *AuthorizationCodeDao) Delete(ctx context.Context, tx *wrap.Tx, id uint64) (err error) {
 	stmt := dao.deleteStmt
 	if tx != nil {
 		stmt = tx.Stmt(ctx, stmt)
@@ -1026,7 +1032,7 @@ var OAUTH_CLIENT_ALL_FIELDS = []string{
 }
 
 type OauthClient struct {
-	Id           int64  //size=20
+	Id           uint64 //size=20
 	ClientId     string //size=128
 	AccountId    string //size=128
 	PasswordHash string //size=128
@@ -1125,18 +1131,20 @@ func (q *OauthClientQuery) And() *OauthClientQuery   { return q.w(" AND ") }
 func (q *OauthClientQuery) Or() *OauthClientQuery    { return q.w(" OR ") }
 func (q *OauthClientQuery) Not() *OauthClientQuery   { return q.w(" NOT ") }
 
-func (q *OauthClientQuery) Id_Equal(v int64) *OauthClientQuery { return q.w("id='" + fmt.Sprint(v) + "'") }
-func (q *OauthClientQuery) Id_NotEqual(v int64) *OauthClientQuery {
+func (q *OauthClientQuery) Id_Equal(v uint64) *OauthClientQuery {
+	return q.w("id='" + fmt.Sprint(v) + "'")
+}
+func (q *OauthClientQuery) Id_NotEqual(v uint64) *OauthClientQuery {
 	return q.w("id<>'" + fmt.Sprint(v) + "'")
 }
-func (q *OauthClientQuery) Id_Less(v int64) *OauthClientQuery { return q.w("id<'" + fmt.Sprint(v) + "'") }
-func (q *OauthClientQuery) Id_LessEqual(v int64) *OauthClientQuery {
+func (q *OauthClientQuery) Id_Less(v uint64) *OauthClientQuery { return q.w("id<'" + fmt.Sprint(v) + "'") }
+func (q *OauthClientQuery) Id_LessEqual(v uint64) *OauthClientQuery {
 	return q.w("id<='" + fmt.Sprint(v) + "'")
 }
-func (q *OauthClientQuery) Id_Greater(v int64) *OauthClientQuery {
+func (q *OauthClientQuery) Id_Greater(v uint64) *OauthClientQuery {
 	return q.w("id>'" + fmt.Sprint(v) + "'")
 }
-func (q *OauthClientQuery) Id_GreaterEqual(v int64) *OauthClientQuery {
+func (q *OauthClientQuery) Id_GreaterEqual(v uint64) *OauthClientQuery {
 	return q.w("id>='" + fmt.Sprint(v) + "'")
 }
 func (q *OauthClientQuery) ClientId_Equal(v string) *OauthClientQuery {
@@ -1334,7 +1342,7 @@ func (dao *OauthClientDao) Update(ctx context.Context, tx *wrap.Tx, e *OauthClie
 	return nil
 }
 
-func (dao *OauthClientDao) Delete(ctx context.Context, tx *wrap.Tx, id int64) (err error) {
+func (dao *OauthClientDao) Delete(ctx context.Context, tx *wrap.Tx, id uint64) (err error) {
 	stmt := dao.deleteStmt
 	if tx != nil {
 		stmt = tx.Stmt(ctx, stmt)
@@ -1462,7 +1470,7 @@ var OAUTH_SCOPE_ALL_FIELDS = []string{
 }
 
 type OauthScope struct {
-	Id         int64  //size=20
+	Id         uint64 //size=20
 	OauthScope string //size=256
 	ScopeDesc  string //size=1024
 	CreateTime time.Time
@@ -1559,16 +1567,18 @@ func (q *OauthScopeQuery) And() *OauthScopeQuery   { return q.w(" AND ") }
 func (q *OauthScopeQuery) Or() *OauthScopeQuery    { return q.w(" OR ") }
 func (q *OauthScopeQuery) Not() *OauthScopeQuery   { return q.w(" NOT ") }
 
-func (q *OauthScopeQuery) Id_Equal(v int64) *OauthScopeQuery { return q.w("id='" + fmt.Sprint(v) + "'") }
-func (q *OauthScopeQuery) Id_NotEqual(v int64) *OauthScopeQuery {
+func (q *OauthScopeQuery) Id_Equal(v uint64) *OauthScopeQuery { return q.w("id='" + fmt.Sprint(v) + "'") }
+func (q *OauthScopeQuery) Id_NotEqual(v uint64) *OauthScopeQuery {
 	return q.w("id<>'" + fmt.Sprint(v) + "'")
 }
-func (q *OauthScopeQuery) Id_Less(v int64) *OauthScopeQuery { return q.w("id<'" + fmt.Sprint(v) + "'") }
-func (q *OauthScopeQuery) Id_LessEqual(v int64) *OauthScopeQuery {
+func (q *OauthScopeQuery) Id_Less(v uint64) *OauthScopeQuery { return q.w("id<'" + fmt.Sprint(v) + "'") }
+func (q *OauthScopeQuery) Id_LessEqual(v uint64) *OauthScopeQuery {
 	return q.w("id<='" + fmt.Sprint(v) + "'")
 }
-func (q *OauthScopeQuery) Id_Greater(v int64) *OauthScopeQuery { return q.w("id>'" + fmt.Sprint(v) + "'") }
-func (q *OauthScopeQuery) Id_GreaterEqual(v int64) *OauthScopeQuery {
+func (q *OauthScopeQuery) Id_Greater(v uint64) *OauthScopeQuery {
+	return q.w("id>'" + fmt.Sprint(v) + "'")
+}
+func (q *OauthScopeQuery) Id_GreaterEqual(v uint64) *OauthScopeQuery {
 	return q.w("id>='" + fmt.Sprint(v) + "'")
 }
 func (q *OauthScopeQuery) OauthScope_Equal(v string) *OauthScopeQuery {
@@ -1730,7 +1740,7 @@ func (dao *OauthScopeDao) Update(ctx context.Context, tx *wrap.Tx, e *OauthScope
 	return nil
 }
 
-func (dao *OauthScopeDao) Delete(ctx context.Context, tx *wrap.Tx, id int64) (err error) {
+func (dao *OauthScopeDao) Delete(ctx context.Context, tx *wrap.Tx, id uint64) (err error) {
 	stmt := dao.deleteStmt
 	if tx != nil {
 		stmt = tx.Stmt(ctx, stmt)
@@ -1864,7 +1874,7 @@ var REFRESH_TOKEN_ALL_FIELDS = []string{
 }
 
 type RefreshToken struct {
-	Id            int64  //size=20
+	Id            uint64 //size=20
 	RefreshToken  string //size=128
 	ClientId      string //size=128
 	AccountId     string //size=128
@@ -1964,22 +1974,22 @@ func (q *RefreshTokenQuery) And() *RefreshTokenQuery   { return q.w(" AND ") }
 func (q *RefreshTokenQuery) Or() *RefreshTokenQuery    { return q.w(" OR ") }
 func (q *RefreshTokenQuery) Not() *RefreshTokenQuery   { return q.w(" NOT ") }
 
-func (q *RefreshTokenQuery) Id_Equal(v int64) *RefreshTokenQuery {
+func (q *RefreshTokenQuery) Id_Equal(v uint64) *RefreshTokenQuery {
 	return q.w("id='" + fmt.Sprint(v) + "'")
 }
-func (q *RefreshTokenQuery) Id_NotEqual(v int64) *RefreshTokenQuery {
+func (q *RefreshTokenQuery) Id_NotEqual(v uint64) *RefreshTokenQuery {
 	return q.w("id<>'" + fmt.Sprint(v) + "'")
 }
-func (q *RefreshTokenQuery) Id_Less(v int64) *RefreshTokenQuery {
+func (q *RefreshTokenQuery) Id_Less(v uint64) *RefreshTokenQuery {
 	return q.w("id<'" + fmt.Sprint(v) + "'")
 }
-func (q *RefreshTokenQuery) Id_LessEqual(v int64) *RefreshTokenQuery {
+func (q *RefreshTokenQuery) Id_LessEqual(v uint64) *RefreshTokenQuery {
 	return q.w("id<='" + fmt.Sprint(v) + "'")
 }
-func (q *RefreshTokenQuery) Id_Greater(v int64) *RefreshTokenQuery {
+func (q *RefreshTokenQuery) Id_Greater(v uint64) *RefreshTokenQuery {
 	return q.w("id>'" + fmt.Sprint(v) + "'")
 }
-func (q *RefreshTokenQuery) Id_GreaterEqual(v int64) *RefreshTokenQuery {
+func (q *RefreshTokenQuery) Id_GreaterEqual(v uint64) *RefreshTokenQuery {
 	return q.w("id>='" + fmt.Sprint(v) + "'")
 }
 func (q *RefreshTokenQuery) RefreshToken_Equal(v string) *RefreshTokenQuery {
@@ -2195,7 +2205,7 @@ func (dao *RefreshTokenDao) Update(ctx context.Context, tx *wrap.Tx, e *RefreshT
 	return nil
 }
 
-func (dao *RefreshTokenDao) Delete(ctx context.Context, tx *wrap.Tx, id int64) (err error) {
+func (dao *RefreshTokenDao) Delete(ctx context.Context, tx *wrap.Tx, id uint64) (err error) {
 	stmt := dao.deleteStmt
 	if tx != nil {
 		stmt = tx.Stmt(ctx, stmt)
