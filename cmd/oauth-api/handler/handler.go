@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"fmt"
 	"github.com/NeuronFramework/errors"
 	"github.com/NeuronFramework/log"
 	"github.com/NeuronOauth/oauth/api/gen/restapi/operations"
@@ -29,15 +28,11 @@ func NewOauthHandler() (h *OauthHandler, err error) {
 }
 
 func (h *OauthHandler) BasicAuth(clientId string, password string) (interface{}, error) {
-	fmt.Println("BasicAuth", clientId, password)
 	c, err := h.service.ClientLogin(context.Background(), clientId, password)
-	fmt.Println("BasicAuth", c, err)
 	return c, err
 }
 
 func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) middleware.Responder {
-	fmt.Println("token", oauthClient)
-
 	if oauthClient == nil {
 		return errors.Unauthorized("client认证失败")
 	}
