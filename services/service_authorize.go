@@ -10,7 +10,9 @@ import (
 
 func (s *OauthService) Authorize(ctx context.Context, p *models.AuthorizeParams) (code *models.AuthorizationCode, err error) {
 	claims := jwt.StandardClaims{}
-	_, err = jwt.ParseWithClaims(p.AccountJwt, &claims, func(t *jwt.Token) (interface{}, error) { return []byte("0123456789"), nil })
+	_, err = jwt.ParseWithClaims(p.AccountJwt, &claims, func(t *jwt.Token) (interface{}, error) {
+		return []byte("0123456789"), nil
+	})
 	if err != nil {
 		return nil, err
 	}
