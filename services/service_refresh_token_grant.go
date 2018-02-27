@@ -13,7 +13,7 @@ func (s *OauthService) RefreshTokenGrant(ctx context.Context, refreshToken strin
 	}
 
 	if dbRefreshToken == nil {
-		return nil, errors.InvalidParam("refresh_token", "无效的RefreshToken")
+		return nil, errors.InvalidParam("无效的RefreshToken")
 	}
 
 	return s.newAccessToken(ctx, dbRefreshToken.ClientId, dbRefreshToken.AccountId, dbRefreshToken.OauthScope)

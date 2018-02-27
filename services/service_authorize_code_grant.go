@@ -15,7 +15,7 @@ func (s *OauthService) AuthorizeCodeGrant(ctx context.Context, authorizationCode
 	}
 
 	if dbAuthorizationCode == nil {
-		return nil, errors.InvalidParam("AuthorizationCode", "无效的AuthorizationCode")
+		return nil, errors.InvalidParam("无效的AuthorizationCode")
 	}
 
 	return s.newAccessToken(ctx, dbAuthorizationCode.ClientId, dbAuthorizationCode.AccountId, dbAuthorizationCode.OauthScope)

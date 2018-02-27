@@ -19,7 +19,7 @@ func NewOauthService(options *OauthServiceOptions) (s *OauthService, err error) 
 	s = &OauthService{}
 	s.logger = log.TypedLogger(s)
 	s.options = options
-	s.oauthDB, err = oauth_db.NewDB("root:123456@tcp(127.0.0.1:3307)/account-oauth?parseTime=true")
+	s.oauthDB, err = oauth_db.NewDB()
 	if err != nil {
 		return nil, err
 	}

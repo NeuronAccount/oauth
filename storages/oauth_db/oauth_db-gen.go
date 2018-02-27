@@ -9,6 +9,7 @@ import (
 	"github.com/NeuronFramework/sql/wrap"
 	"github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
+	"os"
 	"strings"
 	"time"
 )
@@ -366,6 +367,7 @@ func (dao *AccessTokenDao) init() (err error) {
 
 	return nil
 }
+
 func (dao *AccessTokenDao) prepareInsertStmt() (err error) {
 	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO access_token (access_token,client_id,account_id,expire_seconds,oauth_scope) VALUES (?,?,?,?,?)")
 	return err
@@ -852,6 +854,7 @@ func (dao *AuthorizationCodeDao) init() (err error) {
 
 	return nil
 }
+
 func (dao *AuthorizationCodeDao) prepareInsertStmt() (err error) {
 	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO authorization_code (authorization_code,client_id,account_id,redirect_uri,oauth_scope,expire_seconds) VALUES (?,?,?,?,?,?)")
 	return err
@@ -1294,6 +1297,7 @@ func (dao *OauthClientDao) init() (err error) {
 
 	return nil
 }
+
 func (dao *OauthClientDao) prepareInsertStmt() (err error) {
 	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO oauth_client (client_id,account_id,password_hash,redirect_uri) VALUES (?,?,?,?)")
 	return err
@@ -1692,6 +1696,7 @@ func (dao *OauthScopeDao) init() (err error) {
 
 	return nil
 }
+
 func (dao *OauthScopeDao) prepareInsertStmt() (err error) {
 	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO oauth_scope (oauth_scope,scope_desc) VALUES (?,?)")
 	return err
@@ -2157,6 +2162,7 @@ func (dao *RefreshTokenDao) init() (err error) {
 
 	return nil
 }
+
 func (dao *RefreshTokenDao) prepareInsertStmt() (err error) {
 	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO refresh_token (refresh_token,client_id,account_id,expire_seconds,oauth_scope) VALUES (?,?,?,?,?)")
 	return err
@@ -2321,13 +2327,14 @@ type DB struct {
 	RefreshToken      *RefreshTokenDao
 }
 
-func NewDB(connectionString string) (d *DB, err error) {
-	if connectionString == "" {
-		return nil, fmt.Errorf("connectionString nil")
-	}
-
+func NewDB() (d *DB, err error) {
 	d = &DB{}
 
+	connectionString := os.Getenv("DB")
+	if connectionString == "" {
+		return nil, fmt.Errorf("DB env nil")
+	}
+	connectionString += "/account-oauth?parseTime=true"
 	db, err := wrap.Open("mysql", connectionString)
 	if err != nil {
 		return nil, err

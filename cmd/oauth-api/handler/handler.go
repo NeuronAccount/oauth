@@ -39,15 +39,15 @@ func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) 
 
 	if p.GrantType == "authorization_code" {
 		if p.Code == nil {
-			return errors.InvalidParam("Code", "不能为空")
+			return errors.InvalidParam("Code不能为空")
 		}
 
 		if p.RedirectURI == nil {
-			return errors.InvalidParam("RedirectURI", "不能为空")
+			return errors.InvalidParam("RedirectURI不能为空")
 		}
 
 		if p.ClientID == nil {
-			return errors.InvalidParam("ClientID", "不能为空")
+			return errors.InvalidParam("ClientID不能为空")
 		}
 
 		result, err := h.service.AuthorizeCodeGrant(context.Background(),
@@ -59,11 +59,11 @@ func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) 
 		return operations.NewTokenOK().WithPayload(fromTokenResponse(result))
 	} else if p.GrantType == "refresh_token" {
 		if p.RefreshToken == nil {
-			return errors.InvalidParam("RefreshToken", "不能为空")
+			return errors.InvalidParam("RefreshToken不能为空")
 		}
 
 		if p.Scope == nil {
-			return errors.InvalidParam("Scope", "不能为空")
+			return errors.InvalidParam("Scope不能为空")
 		}
 
 		result, err := h.service.RefreshTokenGrant(context.Background(),
@@ -74,7 +74,7 @@ func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) 
 
 		return operations.NewTokenOK().WithPayload(fromTokenResponse(result))
 	} else {
-		return errors.InvalidParam("GrantType", "未知的类型")
+		return errors.InvalidParam("GrantType未知的类型")
 	}
 }
 

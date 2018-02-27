@@ -7,13 +7,9 @@ import (
 	"github.com/NeuronOauth/oauth/cmd/oauth-private-api/handler"
 	"github.com/go-openapi/loads"
 	"net/http"
-	"os"
 )
 
 func main() {
-	os.Setenv("DEBUG", "true")
-	os.Setenv("PORT", "8085")
-
 	restful.Run(func() (http.Handler, error) {
 		h, err := handler.NewOauthHandler()
 		if err != nil {
