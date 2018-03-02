@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
-NAME="neuron-todo-private-api" \
+PORT=8085 \
+NAME="neuron-oauth-private-api" \
 VERSION="v1.0.0" \
 neuron-release.sh
