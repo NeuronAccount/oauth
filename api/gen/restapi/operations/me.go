@@ -41,6 +41,8 @@ type Me struct {
 }
 
 func (o *Me) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+	zap.L().Named("api").Info("Me")
+
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
 		r = rCtx
@@ -48,6 +50,7 @@ func (o *Me) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	var Params = NewMeParams()
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
+		zap.L().Named("api").Info("Me", zap.Error(err))
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}

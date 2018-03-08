@@ -28,6 +28,7 @@ type MeOK struct {
 
 // NewMeOK creates MeOK with default headers values
 func NewMeOK() *MeOK {
+
 	return &MeOK{}
 }
 

@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/NeuronOauth/oauth/api/gen/models"
+	models "github.com/NeuronOauth/oauth/api/gen/models"
 )
 
 // TokenOKCode is the HTTP code returned for type TokenOK
@@ -30,6 +30,7 @@ type TokenOK struct {
 
 // NewTokenOK creates TokenOK with default headers values
 func NewTokenOK() *TokenOK {
+
 	return &TokenOK{}
 }
 

@@ -17,9 +17,9 @@ import (
 )
 
 // NewTokenParams creates a new TokenParams object
-// with the default values initialized.
+// no default values defined in spec.
 func NewTokenParams() TokenParams {
-	var ()
+
 	return TokenParams{}
 }
 
@@ -68,9 +68,12 @@ type TokenParams struct {
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
-// for simple values it will use straight method calls
+// for simple values it will use straight method calls.
+//
+// To ensure default values, the struct must have been initialized with NewTokenParams() beforehand.
 func (o *TokenParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
+
 	o.HTTPRequest = r
 
 	qs := runtime.Values(r.URL.Query())
@@ -126,6 +129,9 @@ func (o *TokenParams) bindClientID(rawData []string, hasKey bool, formats strfmt
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: false
+	// AllowEmptyValue: false
 	if raw == "" { // empty values pass all other validations
 		return nil
 	}
@@ -140,6 +146,9 @@ func (o *TokenParams) bindCode(rawData []string, hasKey bool, formats strfmt.Reg
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: false
+	// AllowEmptyValue: false
 	if raw == "" { // empty values pass all other validations
 		return nil
 	}
@@ -157,6 +166,9 @@ func (o *TokenParams) bindGrantType(rawData []string, hasKey bool, formats strfm
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: true
+	// AllowEmptyValue: false
 	if err := validate.RequiredString("grant_type", "query", raw); err != nil {
 		return err
 	}
@@ -171,6 +183,9 @@ func (o *TokenParams) bindRedirectURI(rawData []string, hasKey bool, formats str
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: false
+	// AllowEmptyValue: false
 	if raw == "" { // empty values pass all other validations
 		return nil
 	}
@@ -185,6 +200,9 @@ func (o *TokenParams) bindRefreshToken(rawData []string, hasKey bool, formats st
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: false
+	// AllowEmptyValue: false
 	if raw == "" { // empty values pass all other validations
 		return nil
 	}
@@ -199,6 +217,9 @@ func (o *TokenParams) bindResponseType(rawData []string, hasKey bool, formats st
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: false
+	// AllowEmptyValue: false
 	if raw == "" { // empty values pass all other validations
 		return nil
 	}
@@ -213,6 +234,9 @@ func (o *TokenParams) bindScope(rawData []string, hasKey bool, formats strfmt.Re
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: false
+	// AllowEmptyValue: false
 	if raw == "" { // empty values pass all other validations
 		return nil
 	}
@@ -227,6 +251,9 @@ func (o *TokenParams) bindState(rawData []string, hasKey bool, formats strfmt.Re
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: false
+	// AllowEmptyValue: false
 	if raw == "" { // empty values pass all other validations
 		return nil
 	}

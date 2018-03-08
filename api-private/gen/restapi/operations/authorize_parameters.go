@@ -17,9 +17,9 @@ import (
 )
 
 // NewAuthorizeParams creates a new AuthorizeParams object
-// with the default values initialized.
+// no default values defined in spec.
 func NewAuthorizeParams() AuthorizeParams {
-	var ()
+
 	return AuthorizeParams{}
 }
 
@@ -65,9 +65,12 @@ type AuthorizeParams struct {
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
-// for simple values it will use straight method calls
+// for simple values it will use straight method calls.
+//
+// To ensure default values, the struct must have been initialized with NewAuthorizeParams() beforehand.
 func (o *AuthorizeParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
+
 	o.HTTPRequest = r
 
 	qs := runtime.Values(r.URL.Query())
@@ -116,6 +119,9 @@ func (o *AuthorizeParams) bindAccountJwt(rawData []string, hasKey bool, formats 
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: true
+	// AllowEmptyValue: false
 	if err := validate.RequiredString("accountJwt", "query", raw); err != nil {
 		return err
 	}
@@ -133,6 +139,9 @@ func (o *AuthorizeParams) bindClientID(rawData []string, hasKey bool, formats st
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: true
+	// AllowEmptyValue: false
 	if err := validate.RequiredString("client_id", "query", raw); err != nil {
 		return err
 	}
@@ -150,6 +159,9 @@ func (o *AuthorizeParams) bindRedirectURI(rawData []string, hasKey bool, formats
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: true
+	// AllowEmptyValue: false
 	if err := validate.RequiredString("redirect_uri", "query", raw); err != nil {
 		return err
 	}
@@ -167,6 +179,9 @@ func (o *AuthorizeParams) bindResponseType(rawData []string, hasKey bool, format
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: true
+	// AllowEmptyValue: false
 	if err := validate.RequiredString("response_type", "query", raw); err != nil {
 		return err
 	}
@@ -184,6 +199,9 @@ func (o *AuthorizeParams) bindScope(rawData []string, hasKey bool, formats strfm
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: true
+	// AllowEmptyValue: false
 	if err := validate.RequiredString("scope", "query", raw); err != nil {
 		return err
 	}
@@ -201,6 +219,9 @@ func (o *AuthorizeParams) bindState(rawData []string, hasKey bool, formats strfm
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
+
+	// Required: true
+	// AllowEmptyValue: false
 	if err := validate.RequiredString("state", "query", raw); err != nil {
 		return err
 	}

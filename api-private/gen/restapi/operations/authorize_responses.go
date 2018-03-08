@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	"github.com/NeuronOauth/oauth/api-private/gen/models"
+	models "github.com/NeuronOauth/oauth/api-private/gen/models"
 )
 
 // AuthorizeOKCode is the HTTP code returned for type AuthorizeOK
@@ -30,6 +30,7 @@ type AuthorizeOK struct {
 
 // NewAuthorizeOK creates AuthorizeOK with default headers values
 func NewAuthorizeOK() *AuthorizeOK {
+
 	return &AuthorizeOK{}
 }
 
