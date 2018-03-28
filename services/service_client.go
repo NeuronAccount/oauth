@@ -14,11 +14,11 @@ func (s *OauthService) ClientLogin(ctx context.Context, clientId string, passwor
 	}
 
 	if dbClient == nil {
-		return nil, fmt.Errorf("clientId not exists")
+		return nil, fmt.Errorf("clientId不存在")
 	}
 
 	if dbClient.PasswordHash != password {
-		return nil, fmt.Errorf("password failed")
+		return nil, fmt.Errorf("password错误")
 	}
 
 	return oauth_db.FromOauthClient(dbClient), nil
