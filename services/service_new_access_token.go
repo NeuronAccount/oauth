@@ -1,13 +1,13 @@
 package services
 
 import (
-	"context"
 	"github.com/NeuronFramework/rand"
+	"github.com/NeuronFramework/restful"
 	"github.com/NeuronOauth/oauth/models"
 	"github.com/NeuronOauth/oauth/storages/oauth_db"
 )
 
-func (s *OauthService) newAccessToken(ctx context.Context, clientId string, accountId string, scope string) (accessToken *models.AccessToken, err error) {
+func (s *OauthService) newAccessToken(ctx *restful.Context, clientId string, accountId string, scope string) (accessToken *models.AccessToken, err error) {
 	dbAccessToken := &oauth_db.AccessToken{}
 	dbAccessToken.AccessToken = rand.NextHex(16)
 	dbAccessToken.ClientId = clientId

@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"context"
 	"github.com/NeuronFramework/errors"
 	"github.com/NeuronFramework/log"
+	"github.com/NeuronFramework/restful"
 	"github.com/NeuronOauth/oauth/api-private/gen/restapi/operations"
 	"github.com/NeuronOauth/oauth/models"
 	"github.com/NeuronOauth/oauth/services"
@@ -28,7 +28,7 @@ func NewOauthHandler() (h *OauthHandler, err error) {
 }
 
 func (h *OauthHandler) Authorize(p operations.AuthorizeParams) middleware.Responder {
-	authorizationCode, err := h.service.Authorize(context.Background(), &models.AuthorizeParams{
+	authorizationCode, err := h.service.Authorize(restful.NewContext(p.HTTPRequest), &models.AuthorizeParams{
 		AccountJwt:   p.AccountJwt,
 		ClientID:     p.ClientID,
 		RedirectURI:  p.RedirectURI,

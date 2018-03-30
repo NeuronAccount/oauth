@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `access_token`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `access_token` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `access_token` varchar(1024) NOT NULL,
+  `access_token` varchar(128) NOT NULL,
   `client_id` varchar(128) NOT NULL,
   `account_id` varchar(128) NOT NULL,
   `expire_seconds` bigint(20) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE `access_token` (
   KEY `idx_update_time` (`update_time`),
   KEY `idx_client_account` (`client_id`,`account_id`),
   KEY `idx_account_id` (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1300 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -56,12 +56,13 @@ CREATE TABLE `authorization_code` (
   `expire_seconds` bigint(20) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `user_agent` varchar(256) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_authorize_code` (`authorization_code`),
   KEY `idx_update_time` (`update_time`),
   KEY `idx_account_id` (`account_id`),
   KEY `idx_client_account` (`client_id`,`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1456 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -83,7 +84,7 @@ CREATE TABLE `oauth_client` (
   UNIQUE KEY `idx_client_id` (`client_id`),
   KEY `idx_account_id` (`account_id`),
   KEY `idx_update_time` (`update_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +101,7 @@ CREATE TABLE `oauth_scope` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_scope` (`oauth_scope`),
+  UNIQUE KEY `idx_scope` (`oauth_scope`(255)),
   KEY `idx_update_time` (`update_time`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -126,7 +127,7 @@ CREATE TABLE `refresh_token` (
   KEY `idx_update_time` (`update_time`),
   KEY `idx_account_id` (`account_id`),
   KEY `idx_client_account` (`client_id`,`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1300 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -138,4 +139,4 @@ CREATE TABLE `refresh_token` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-12-10  0:02:41
+-- Dump completed on 2018-03-30  8:36:57

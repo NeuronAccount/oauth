@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"context"
 	"github.com/NeuronFramework/errors"
 	"github.com/NeuronFramework/log"
+	"github.com/NeuronFramework/restful"
 	"github.com/NeuronOauth/oauth/api/gen/restapi/operations"
 	"github.com/NeuronOauth/oauth/models"
 	"github.com/NeuronOauth/oauth/services"
@@ -28,7 +28,7 @@ func NewOauthHandler() (h *OauthHandler, err error) {
 }
 
 func (h *OauthHandler) BasicAuth(clientId string, password string) (interface{}, error) {
-	c, err := h.service.ClientLogin(context.Background(), clientId, password)
+	c, err := h.service.ClientLogin(&restful.Context{}, clientId, password)
 	return c, err
 }
 
@@ -50,7 +50,7 @@ func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) 
 			return errors.InvalidParam("ClientID不能为空")
 		}
 
-		result, err := h.service.AuthorizeCodeGrant(context.Background(),
+		result, err := h.service.AuthorizeCodeGrant(restful.NewContext(p.HTTPRequest),
 			*p.Code, *p.RedirectURI, *p.ClientID, oauthClient.(*models.OauthClient))
 		if err != nil {
 			return errors.Wrap(err)
@@ -66,7 +66,7 @@ func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) 
 			return errors.InvalidParam("Scope不能为空")
 		}
 
-		result, err := h.service.RefreshTokenGrant(context.Background(),
+		result, err := h.service.RefreshTokenGrant(restful.NewContext(p.HTTPRequest),
 			*p.RefreshToken, *p.Scope, oauthClient.(*models.OauthClient))
 		if err != nil {
 			return errors.Wrap(err)
@@ -79,7 +79,7 @@ func (h *OauthHandler) Token(p operations.TokenParams, oauthClient interface{}) 
 }
 
 func (h *OauthHandler) Me(p operations.MeParams) middleware.Responder {
-	openId, err := h.service.Me(context.Background(), p.AccessToken)
+	openId, err := h.service.Me(restful.NewContext(p.HTTPRequest), p.AccessToken)
 	if err != nil {
 		return errors.Wrap(err)
 	}

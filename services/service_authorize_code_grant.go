@@ -1,12 +1,12 @@
 package services
 
 import (
-	"context"
 	"github.com/NeuronFramework/errors"
+	"github.com/NeuronFramework/restful"
 	"github.com/NeuronOauth/oauth/models"
 )
 
-func (s *OauthService) AuthorizeCodeGrant(ctx context.Context, authorizationCode string, redirectUri string, clientId string, oAuth2Client *models.OauthClient) (accessToken *models.AccessToken, err error) {
+func (s *OauthService) AuthorizeCodeGrant(ctx *restful.Context, authorizationCode string, redirectUri string, clientId string, oAuth2Client *models.OauthClient) (accessToken *models.AccessToken, err error) {
 	dbAuthorizationCode, err := s.oauthDB.AuthorizationCode.GetQuery().
 		AuthorizationCode_Equal(authorizationCode).
 		QueryOne(ctx, nil)

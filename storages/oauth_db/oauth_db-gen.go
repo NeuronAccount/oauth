@@ -87,7 +87,7 @@ var ACCESS_TOKEN_ALL_FIELDS = []string{
 
 type AccessToken struct {
 	Id            uint64 //size=20
-	AccessToken   string //size=1024
+	AccessToken   string //size=128
 	ClientId      string //size=128
 	AccountId     string //size=128
 	ExpireSeconds int64  //size=20
@@ -536,8 +536,9 @@ const AUTHORIZATION_CODE_FIELD_OAUTH_SCOPE = AUTHORIZATION_CODE_FIELD("oauth_sco
 const AUTHORIZATION_CODE_FIELD_EXPIRE_SECONDS = AUTHORIZATION_CODE_FIELD("expire_seconds")
 const AUTHORIZATION_CODE_FIELD_CREATE_TIME = AUTHORIZATION_CODE_FIELD("create_time")
 const AUTHORIZATION_CODE_FIELD_UPDATE_TIME = AUTHORIZATION_CODE_FIELD("update_time")
+const AUTHORIZATION_CODE_FIELD_USER_AGENT = AUTHORIZATION_CODE_FIELD("user_agent")
 
-const AUTHORIZATION_CODE_ALL_FIELDS_STRING = "id,authorization_code,client_id,account_id,redirect_uri,oauth_scope,expire_seconds,create_time,update_time"
+const AUTHORIZATION_CODE_ALL_FIELDS_STRING = "id,authorization_code,client_id,account_id,redirect_uri,oauth_scope,expire_seconds,create_time,update_time,user_agent"
 
 var AUTHORIZATION_CODE_ALL_FIELDS = []string{
 	"id",
@@ -549,6 +550,7 @@ var AUTHORIZATION_CODE_ALL_FIELDS = []string{
 	"expire_seconds",
 	"create_time",
 	"update_time",
+	"user_agent",
 }
 
 type AuthorizationCode struct {
@@ -561,6 +563,7 @@ type AuthorizationCode struct {
 	ExpireSeconds     int64  //size=20
 	CreateTime        time.Time
 	UpdateTime        time.Time
+	UserAgent         string //size=256
 }
 
 type AuthorizationCodeQuery struct {
@@ -815,6 +818,24 @@ func (q *AuthorizationCodeQuery) UpdateTime_Greater(v time.Time) *AuthorizationC
 func (q *AuthorizationCodeQuery) UpdateTime_GreaterEqual(v time.Time) *AuthorizationCodeQuery {
 	return q.w("update_time>='" + fmt.Sprint(v) + "'")
 }
+func (q *AuthorizationCodeQuery) UserAgent_Equal(v string) *AuthorizationCodeQuery {
+	return q.w("user_agent='" + fmt.Sprint(v) + "'")
+}
+func (q *AuthorizationCodeQuery) UserAgent_NotEqual(v string) *AuthorizationCodeQuery {
+	return q.w("user_agent<>'" + fmt.Sprint(v) + "'")
+}
+func (q *AuthorizationCodeQuery) UserAgent_Less(v string) *AuthorizationCodeQuery {
+	return q.w("user_agent<'" + fmt.Sprint(v) + "'")
+}
+func (q *AuthorizationCodeQuery) UserAgent_LessEqual(v string) *AuthorizationCodeQuery {
+	return q.w("user_agent<='" + fmt.Sprint(v) + "'")
+}
+func (q *AuthorizationCodeQuery) UserAgent_Greater(v string) *AuthorizationCodeQuery {
+	return q.w("user_agent>'" + fmt.Sprint(v) + "'")
+}
+func (q *AuthorizationCodeQuery) UserAgent_GreaterEqual(v string) *AuthorizationCodeQuery {
+	return q.w("user_agent>='" + fmt.Sprint(v) + "'")
+}
 
 type AuthorizationCodeDao struct {
 	logger     *zap.Logger
@@ -856,12 +877,12 @@ func (dao *AuthorizationCodeDao) init() (err error) {
 }
 
 func (dao *AuthorizationCodeDao) prepareInsertStmt() (err error) {
-	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO authorization_code (authorization_code,client_id,account_id,redirect_uri,oauth_scope,expire_seconds) VALUES (?,?,?,?,?,?)")
+	dao.insertStmt, err = dao.db.Prepare(context.Background(), "INSERT INTO authorization_code (authorization_code,client_id,account_id,redirect_uri,oauth_scope,expire_seconds,user_agent) VALUES (?,?,?,?,?,?,?)")
 	return err
 }
 
 func (dao *AuthorizationCodeDao) prepareUpdateStmt() (err error) {
-	dao.updateStmt, err = dao.db.Prepare(context.Background(), "UPDATE authorization_code SET authorization_code=?,client_id=?,account_id=?,redirect_uri=?,oauth_scope=?,expire_seconds=? WHERE id=?")
+	dao.updateStmt, err = dao.db.Prepare(context.Background(), "UPDATE authorization_code SET authorization_code=?,client_id=?,account_id=?,redirect_uri=?,oauth_scope=?,expire_seconds=?,user_agent=? WHERE id=?")
 	return err
 }
 
@@ -876,7 +897,7 @@ func (dao *AuthorizationCodeDao) Insert(ctx context.Context, tx *wrap.Tx, e *Aut
 		stmt = tx.Stmt(ctx, stmt)
 	}
 
-	result, err := stmt.Exec(ctx, e.AuthorizationCode, e.ClientId, e.AccountId, e.RedirectUri, e.OauthScope, e.ExpireSeconds)
+	result, err := stmt.Exec(ctx, e.AuthorizationCode, e.ClientId, e.AccountId, e.RedirectUri, e.OauthScope, e.ExpireSeconds, e.UserAgent)
 	if err != nil {
 		return 0, err
 	}
@@ -895,7 +916,7 @@ func (dao *AuthorizationCodeDao) Update(ctx context.Context, tx *wrap.Tx, e *Aut
 		stmt = tx.Stmt(ctx, stmt)
 	}
 
-	_, err = stmt.Exec(ctx, e.AuthorizationCode, e.ClientId, e.AccountId, e.RedirectUri, e.OauthScope, e.ExpireSeconds, e.Id)
+	_, err = stmt.Exec(ctx, e.AuthorizationCode, e.ClientId, e.AccountId, e.RedirectUri, e.OauthScope, e.ExpireSeconds, e.UserAgent, e.Id)
 	if err != nil {
 		return err
 	}
@@ -919,7 +940,7 @@ func (dao *AuthorizationCodeDao) Delete(ctx context.Context, tx *wrap.Tx, id uin
 
 func (dao *AuthorizationCodeDao) scanRow(row *wrap.Row) (*AuthorizationCode, error) {
 	e := &AuthorizationCode{}
-	err := row.Scan(&e.Id, &e.AuthorizationCode, &e.ClientId, &e.AccountId, &e.RedirectUri, &e.OauthScope, &e.ExpireSeconds, &e.CreateTime, &e.UpdateTime)
+	err := row.Scan(&e.Id, &e.AuthorizationCode, &e.ClientId, &e.AccountId, &e.RedirectUri, &e.OauthScope, &e.ExpireSeconds, &e.CreateTime, &e.UpdateTime, &e.UserAgent)
 	if err != nil {
 		if err == wrap.ErrNoRows {
 			return nil, nil
@@ -935,7 +956,7 @@ func (dao *AuthorizationCodeDao) scanRows(rows *wrap.Rows) (list []*Authorizatio
 	list = make([]*AuthorizationCode, 0)
 	for rows.Next() {
 		e := AuthorizationCode{}
-		err = rows.Scan(&e.Id, &e.AuthorizationCode, &e.ClientId, &e.AccountId, &e.RedirectUri, &e.OauthScope, &e.ExpireSeconds, &e.CreateTime, &e.UpdateTime)
+		err = rows.Scan(&e.Id, &e.AuthorizationCode, &e.ClientId, &e.AccountId, &e.RedirectUri, &e.OauthScope, &e.ExpireSeconds, &e.CreateTime, &e.UpdateTime, &e.UserAgent)
 		if err != nil {
 			return nil, err
 		}

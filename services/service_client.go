@@ -1,13 +1,13 @@
 package services
 
 import (
-	"context"
 	"fmt"
+	"github.com/NeuronFramework/restful"
 	"github.com/NeuronOauth/oauth/models"
 	"github.com/NeuronOauth/oauth/storages/oauth_db"
 )
 
-func (s *OauthService) ClientLogin(ctx context.Context, clientId string, password string) (c *models.OauthClient, err error) {
+func (s *OauthService) ClientLogin(ctx *restful.Context, clientId string, password string) (c *models.OauthClient, err error) {
 	dbClient, err := s.oauthDB.OauthClient.GetQuery().ClientId_Equal(clientId).QueryOne(ctx, nil)
 	if err != nil {
 		return nil, err
